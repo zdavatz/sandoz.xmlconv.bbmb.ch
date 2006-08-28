@@ -34,6 +34,7 @@ begin
 	destination.path = ENV['ACCESS_GLOBOPHARM']
 
 	transaction = XmlConv::Util::Transaction.new
+  transaction.domain = ENV['HTTP_HOST']
 	transaction.input = xml_src
 	transaction.reader = 'WbmbBdd'
 	transaction.writer = 'BddI2'
