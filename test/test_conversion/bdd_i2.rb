@@ -297,7 +297,7 @@ module XmlConv
 				order.mock_handle(:add_position) { |position|
 					assert_instance_of(I2::Position, position)
 					assert_equal('LineNo', position.number)
-					assert_equal('EtNummerId', position.article_ean)
+					assert_equal('12345', position.article_ean)
 					assert_equal(17, position.qty)
 					assert_nil(position.unit)
 					assert_nil(position.delivery_date)
@@ -327,7 +327,7 @@ module XmlConv
 				order.mock_handle(:add_position) { |position|
 					assert_instance_of(I2::Position, position)
 					assert_equal('LineNo', position.number)
-					assert_equal('EtNummerId', position.article_ean)
+					assert_equal('12345', position.article_ean)
 					assert_equal(17, position.qty)
 					assert_equal('STK', position.unit)
 					i2date = position.delivery_date

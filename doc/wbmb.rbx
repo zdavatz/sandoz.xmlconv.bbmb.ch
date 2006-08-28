@@ -6,7 +6,6 @@ $: << File.expand_path('../lib', File.dirname(__FILE__))
 require 'drb/drb'
 require 'xmlconv/util/destination'
 require 'xmlconv/util/transaction'
-require 'xmlconv/config'
 
 begin
 	request = Apache.request
@@ -30,9 +29,9 @@ begin
 	xml_src = $stdin.read(content_length)
 
 	DRb.start_service
-	xmlconv = DRbObject.new(nil, XmlConv::CONFIG.server_url)
+	xmlconv = DRbObject.new(nil, ENV['DRB_SERVER'])
 	destination = XmlConv::Util::DestinationDir.new
-	destination.path = XmlConv::CONFIG.access['globopharm']
+	destination.path = ENV['ACCESS_GLOBOPHARM']
 
 	transaction = XmlConv::Util::Transaction.new
 	transaction.input = xml_src
@@ -41,6 +40,9 @@ begin
 	transaction.destination = destination
 	transaction.origin = "http://#{connection.remote_ip}:#{connection.remote_port}"
   transaction.partner = 'SOAP'
+  transaction.postprocs.push(['Soap', 'update_partner'])
+  transaction.postprocs.push(['Bbmb', 'inject', ENV['ACCESS_BBMB'], 
+                              'gag', '221200'])
 
 	xmlconv.dispatch(transaction)
 

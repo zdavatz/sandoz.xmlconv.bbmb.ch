@@ -34,9 +34,15 @@ class << self
   end
   def _bdd_add_xml_delivery(bdd, soap_mapping, positions)
     delivery = Model::Delivery.new
-    _delivery_add_sender_ids(delivery, soap_mapping.absender)
-    _delivery_add_recipient_ids(delivery, soap_mapping.empfaenger)
-    _delivery_add_soap_info(delivery, soap_mapping.auftrag_info)
+    if(soap_mapping.respond_to?(:absender))
+      _delivery_add_sender_ids(delivery, soap_mapping.absender)
+    end
+    if(soap_mapping.respond_to?(:empfaenger))
+      _delivery_add_recipient_ids(delivery, soap_mapping.empfaenger)
+    end
+    if(soap_mapping.respond_to?(:auftrag_info))
+      _delivery_add_soap_info(delivery, soap_mapping.auftrag_info)
+    end
     _delivery_add_soap_positions(delivery, positions)
     bdd.add_delivery(delivery)
   end
@@ -117,53 +123,40 @@ class << self
       _item_add_soap_ids(item, [pos.identifier].flatten)
       item.qty = _latin1(pos.bestellmenge)
       item.unit = 'PCE'
-      if(amount = _latin1(pos.artikelpreis))
+      if(amount = _named_value(pos, :artikelpreis))
         price = Model::Price.new
         price.purpose = 'NettoPreis'
         price.amount = amount
         item.add_price(price)
       end
-      if(pos.respond_to?(:positionstext))
+      if(value = _named_value(pos, :positionstext))
         txt = Model::FreeText.new
-        txt << _latin1(pos.positionstext)
+        txt << _latin1(value)
         item.add_free_text('text', txt)
       end
       delivery.add_item(item)
     }
-=begin
-        <wbmb:artikel>
-          <wbmb:position>1</wbmb:position>
-          <wbmb:identifier>
-            <wbmb:idtype>gag-code</wbmb:idtype>
-            <wbmb:idvalue>300976</wbmb:idvalue>
-          </wbmb:identifier>
-          <wbmb:identifier>
-            <wbmb:idtype>ean13</wbmb:idtype>
-            <wbmb:idvalue>1234567890123</wbmb:idvalue>
-          </wbmb:identifier>
-          <wbmb:identifier>
-            <wbmb:idtype>pharmacode</wbmb:idtype>
-            <wbmb:idvalue>1234567</wbmb:idvalue>
-          </wbmb:identifier>
-          <wbmb:bestellmenge>12</wbmb:bestellmenge>
-          <wbmb:artikelpreis>6.20</wbmb:artikelpreis>
-        </wbmb:artikel>
-
-=end
   end
   def _item_add_soap_ids(item, ids)
     ids.each { |id|
       key = _latin1(id.idtype)
       value = _latin1(id.idvalue)
-      case key # switch ean13 and customer-ids, due to gag xmlconv/i2 convention
-      when 'gag-code'
-        item.add_id('ET-Nummer', value)
+      case key
       when 'ean13'
+        item.add_id('ET-Nummer', value)
+      when 'pcode'
+        item.add_id('Pharmacode', value)
+      when 'gag-code'
         item.add_id('LieferantenArtikel', value)
       else
         item.add_id(key, value)
       end
     }
+  end
+  def _named_value(parent, name)
+    if(parent.respond_to?(name))
+      _latin1(parent.send(name))
+    end
   end
   def _party_add_delivery_address(party, info)
     shipto = Model::Party.new

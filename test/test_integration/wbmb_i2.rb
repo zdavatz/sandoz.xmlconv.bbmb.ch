@@ -89,7 +89,7 @@ module XmlConv
             <wbmb:idvalue>1234567890123</wbmb:idvalue>
           </wbmb:identifier>
           <wbmb:identifier>
-            <wbmb:idtype>pharmacode</wbmb:idtype>
+            <wbmb:idtype>pcode</wbmb:idtype>
             <wbmb:idvalue>1234567</wbmb:idvalue>
           </wbmb:identifier>
           <wbmb:bestellmenge>1</wbmb:bestellmenge>

@@ -94,8 +94,8 @@ class << self
   def _delivery_add_xml_item(delivery, xml_item)
     item = Model::DeliveryItem.new
     item.line_no = _latin1(delivery.items.size.next.to_s)
-    item.add_id('lieferantenartikel', _latin1(xml_item.attributes['ean']))
-    item.add_id('pharmacode', _latin1(xml_item.attributes['pharmacode']))
+    item.add_id('ET-Nummer', _latin1(xml_item.attributes['ean']))
+    item.add_id('Pharmacode', _latin1(xml_item.attributes['pharmacode']))
     item.qty = _latin1(xml_item.attributes['qte-livraison'])
     item.unit = 'PCE'
     delivery.add_item(item)

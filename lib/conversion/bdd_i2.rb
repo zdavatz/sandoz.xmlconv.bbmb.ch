@@ -40,7 +40,7 @@ module XmlConv
             order.interface = bsr.interface || '61'
             if(customer = bsr.customer)
               _order_add_party(order, customer)
-          end
+            end
           end
           if(customer = delivery.customer)
             _order_add_customer(order, customer)
@@ -144,8 +144,9 @@ module XmlConv
         def _order_add_item(order, item)
           position = I2::Position.new
           position.number = item.line_no
-          position.customer_id = item.customer_id
-          position.article_ean = item.et_nummer_id
+          ## switch ean13 and customer-ids, due to gag xmlconv/i2 convention
+          position.customer_id = item.et_nummer_id
+          position.article_ean = item.customer_id
           position.pharmacode = item.pharmacode_id
           position.qty = item.qty
           position.unit = item.unit
