@@ -100,7 +100,7 @@ module XmlConv
   </com-global>
   <com-pharma ean="7601001368095">
     <livraison>
-      <last-name>Pharmacie du Mandement</last-name>
+    <last-name>Pharmacie du Mandement</last-name>
       <first-name> </first-name>
       <other-name> </other-name>
       <address>
@@ -168,26 +168,50 @@ module XmlConv
         transaction = FlexMock.new
         transaction.mock_handle(:model) { bdd }
         bbmb = FlexMock.new
-        expected_order = [
-          [{:article_ean13=>"7680543801949", :article_pcode=>"2054098"}, 30],
-          [{:article_ean13=>"7680543802403", :article_pcode=>"2054158"}, 15],
-          [{:article_ean13=>"7680543800898", :article_pcode=>"2054129"}, 13],
-          [{:article_ean13=>"7680543802328", :article_pcode=>"2054141"}, 17],
-          [{:article_ean13=>"7680543800706", :article_pcode=>"2054112"}, 28],
-          [{:article_ean13=>"7680548750532", :article_pcode=>"2204899"}, 11],
-          [{:article_ean13=>"7680548750617", :article_pcode=>"2204907"}, 30],
-          [{:article_ean13=>"7680543802083", :article_pcode=>"2054106"}, 12],
-          [{:article_ean13=>"7680543800386", :article_pcode=>"2054081"}, 12],
-          [{:article_ean13=>"7680543800973", :article_pcode=>"2054135"}, 28],
+        expected_orders = [
+          [
+            [{:article_ean13=>"7680543801949", :article_pcode=>"2054098"}, 15],
+            [{:article_ean13=>"7680543802403", :article_pcode=>"2054158"}, 15],
+            [{:article_ean13=>"7680543800898", :article_pcode=>"2054129"}, 6],
+            [{:article_ean13=>"7680543802328", :article_pcode=>"2054141"}, 9],
+            [{:article_ean13=>"7680543800706", :article_pcode=>"2054112"}, 28],
+            [{:article_ean13=>"7680548750532", :article_pcode=>"2204899"}, 11],
+            [{:article_ean13=>"7680548750617", :article_pcode=>"2204907"}, 30],
+          ],
+          [
+            [{:article_ean13=>"7680543802083", :article_pcode=>"2054106"}, 12],
+            [{:article_ean13=>"7680543800386", :article_pcode=>"2054081"}, 12],
+            [{:article_ean13=>"7680543801949", :article_pcode=>"2054098"}, 15],
+            [{:article_ean13=>"7680543800898", :article_pcode=>"2054129"}, 7],
+            [{:article_ean13=>"7680543800973", :article_pcode=>"2054135"}, 28],
+            [{:article_ean13=>"7680543802328", :article_pcode=>"2054141"}, 8],
+          ],
         ]
-        expected_info = {
-          :order_reference => "1861",
-        }
-        bbmb.mock_handle(:inject_order, 1) { |short, id, order, info|
+        expected_infos = [
+          {
+            :order_reference  => "1861", 
+            :order_comment    => <<-EOS.strip
+7601001368095
+Pharmacie du Mandement
+3e adresse e-mail
+1242 Satigny
+            EOS
+          },
+          {
+            :order_reference  => "1861", 
+            :order_comment    => <<-EOS.strip
+7601001368491
+Pharm. Ecole-de-Médecine
+3e adresse e-mail
+1205 Genève
+            EOS
+          },
+        ]
+        bbmb.mock_handle(:inject_order, 2) { |short, id, order, info|
           assert_equal('gag', short)
           assert_equal('221200', id)
-          assert_equal(expected_order, order)
-          assert_equal(expected_info, info)
+          assert_equal(expected_orders.shift, order)
+          assert_equal(expected_infos.shift, info)
         }
         svc = DRb.start_service('druby://localhost:0', bbmb)
         Bbmb.inject(svc.uri, 'gag', '221200', transaction)

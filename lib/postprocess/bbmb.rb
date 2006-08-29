@@ -8,28 +8,30 @@ module XmlConv
     module Bbmb
       def Bbmb.inject(drb_url, name_short, inject_id, transaction)
         if(bdd = transaction.model)
-          begin
-            bbmb = DRbObject.new(nil, drb_url)
-            order = order(bdd)
-            info = info(bdd)
-            bbmb.inject_order(name_short, inject_id, order, info)
-          rescue Exception => e
-            message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
-              << e.class.to_s << "\n" \
-              << e.message << "\n\n" \
-              << e.backtrace.join("\n") << "\n\n" \
-              << "name_short: #{name_short}\n" \
-              << "hospital: #{inject_id}\n"
-            if(order)
-              message << "\norder: \n"
-              order.each { |k,v|  message << "#{k.inspect} => #{v}\n" }
+          bbmb = DRbObject.new(nil, drb_url)
+          bdd.deliveries.each { |delivery|
+            begin
+              order = order(delivery)
+              info = info(delivery)
+              bbmb.inject_order(name_short, inject_id, order, info)
+            rescue Exception => e
+              message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
+                << e.class.to_s << "\n" \
+                << e.message << "\n\n" \
+                << e.backtrace.join("\n") << "\n\n" \
+                << "name_short: #{name_short}\n" \
+                << "hospital: #{inject_id}\n"
+              if(order)
+                message << "\norder: \n"
+                order.each { |k,v|  message << "#{k.inspect} => #{v}\n" }
+              end
+              if(info)
+                message << "\ninfo: \n"
+                  info.each { |k,v| message << "#{k} => #{v}\n" }
+              end
+              raise message
             end
-            if(info)
-              message << "\ninfo: \n"
-                info.each { |k,v| message << "#{k} => #{v}\n" }
-            end
-            raise message
-          end
+          }
         end
       end
       def Bbmb.item_ids(item)
@@ -46,43 +48,31 @@ module XmlConv
           memo
         }
       end
-      def Bbmb.order(bdd)
-        lookup = {}
+      def Bbmb.order(delivery)
         pairs = []
-        bdd.deliveries.each { |delivery|
-          delivery.items.each { |item|
-            qty = item.qty.to_i
-            ids = item_ids(item)
-            if(existing_pair = pairs.find { |pair|
-                 pair.first.any? { |key, value|
-                   ids[key] == value
-                 }
-               })
-              existing_pair[0].update(ids)
-              existing_pair[1] += qty
-            else
-              pairs.push([ids, qty])
-            end
-          }
+        delivery.items.each { |item|
+          pairs.push([item_ids(item), item.qty.to_i])
         }
         pairs
       end
-      def Bbmb.info(bdd)
-        pairs = {}
-        references = []
-        dates = []
-        bdd.deliveries.each { |delivery|
-          references.push(delivery.customer_id)
-          dates.push(delivery.delivery_date)
+      def Bbmb.info(delivery)
+        info = {
+          :order_reference => delivery.customer_id,
         }
-        ref_ids = references.compact.uniq.join('/')
-        unless(ref_ids.empty?)
-          pairs.store(:order_reference, ref_ids)
+        if(date = delivery.delivery_date)
+          info.store(:order_expressdate, date)
         end
-        if(date = dates.compact.sort.first)
-          pairs.store(:order_expressdate, date)
+        lines = []
+        if((cust = delivery.customer) && ship = cust.ship_to)
+          lines.push(ship.acc_id)
+          lines.push(ship.name)
+          if(addr = ship.address)
+            lines.concat(addr.lines)
+            lines.push([addr.zip_code, addr.city].compact.join(' '))
+          end
+          info.store(:order_comment, lines.compact.join("\n"))
         end
-        pairs
+        info
       end
     end
   end
