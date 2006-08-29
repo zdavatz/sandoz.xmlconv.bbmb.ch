@@ -30,8 +30,7 @@ begin
 
 	DRb.start_service
 	xmlconv = DRbObject.new(nil, ENV['DRB_SERVER'])
-	destination = XmlConv::Util::DestinationDir.new
-	destination.path = ENV['ACCESS_GLOBOPHARM']
+	destination = XmlConv::Util::Destination.book(ENV['ACCESS_GLOBOPHARM'])
 
 	transaction = XmlConv::Util::Transaction.new
   transaction.domain = ENV['HTTP_HOST']
