@@ -21,15 +21,19 @@ module XmlConv
       }
       class << self
         def convert(bdd)
+          sender_id = 'YWESEE'
+          if((bsr = bdd.bsr) && (id = bsr.customer.acc_id))
+            sender_id = id
+          end
           bdd.deliveries.collect { |delivery|
             doc = I2::Document.new
-            _doc_add_delivery(doc, delivery)
+            _doc_add_delivery(doc, delivery, sender_id)
             doc
           }
         end
-        def _doc_add_delivery(doc, delivery)
+        def _doc_add_delivery(doc, delivery, sender_id='YWESEE')
           order = I2::Order.new
-          order.sender_id = 'YWESEE'
+          order.sender_id = sender_id
           # customer_id is in reality the delivery_id assigned by the
           # customer - the slight confusion is due to automatic naming
           transaction_id = delivery.customer_id

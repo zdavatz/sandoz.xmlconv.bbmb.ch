@@ -16,6 +16,9 @@ module XmlConv
 class << self
   def convert(xml_document)
     bdd = Model::Bdd.new
+    bsr = Model::Bsr.new
+    _bsr_add_customer_id(bsr, 'YWESEEPP')
+    bdd.bsr = bsr
     REXML::XPath.each(xml_document, '//com-pharma') { |xml_delivery|
       _bdd_add_xml_delivery(bdd, xml_delivery)
     }
@@ -27,10 +30,7 @@ class << self
   def _bdd_add_xml_delivery(bdd, xml_delivery)
     delivery = Model::Delivery.new
     bsr = Model::Bsr.new
-    customer = Model::Party.new
-    customer.role = 'Customer'
-    customer.add_id('ACC', xml_delivery.attributes['ean'])
-    bsr.add_party(customer)
+    _bsr_add_customer_id(bsr, xml_delivery.attributes['ean'])
     delivery.bsr = bsr
     _delivery_add_xml_header(delivery, xml_delivery)
     REXML::XPath.each(xml_delivery, 'article') { |xml_item|
@@ -38,6 +38,12 @@ class << self
     }
     bdd.add_delivery(delivery)
     delivery
+  end
+  def _bsr_add_customer_id(bsr, id)
+    customer = Model::Party.new
+    customer.role = 'Customer'
+    customer.add_id('ACC', id)
+    bsr.add_party(customer)
   end
   def _customer_add_party(customer, id, role)
     party = Model::Party.new

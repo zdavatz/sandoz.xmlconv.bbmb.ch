@@ -29,8 +29,13 @@ module XmlConv
 				delivery.mock_handle(:transport_cost) {}
 				delivery.mock_handle(:agreement) { agreement }
 				delivery.mock_handle(:items) { [] }
+        customer = FlexMock.new
+        customer.mock_handle(:acc_id) { 'YWESEEPP' }
+        gbsr = FlexMock.new
+        gbsr.mock_handle(:customer) { customer }
 				bdd = FlexMock.new
 				bdd.mock_handle(:deliveries) { [delivery] }
+        bdd.mock_handle(:bsr) { gbsr }
 				i2s = BddI2.convert(bdd)
         assert_instance_of(Array, i2s)
         i2 = i2s.first
