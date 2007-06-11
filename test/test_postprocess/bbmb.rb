@@ -102,7 +102,7 @@ module XmlConv
     <livraison>
     <last-name>Pharmacie du Mandement</last-name>
       <first-name> </first-name>
-      <other-name> </other-name>
+      <other-name> Monsieur Frédéric Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1242</zip>
@@ -135,7 +135,7 @@ module XmlConv
     <livraison>
       <last-name>Pharm. Ecole-de-Médecine</last-name>
       <first-name> </first-name>
-      <other-name> </other-name>
+      <other-name> Madame Françoise Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1205</zip>
@@ -192,6 +192,7 @@ module XmlConv
             :order_reference  => "1861", 
             :order_comment    => <<-EOS.strip
 7601001368095
+Monsieur Frédéric Recipient
 Pharmacie du Mandement
 3e adresse e-mail
 1242 Satigny
@@ -201,6 +202,7 @@ Pharmacie du Mandement
             :order_reference  => "1861", 
             :order_comment    => <<-EOS.strip
 7601001368491
+Madame Françoise Recipient
 Pharm. Ecole-de-Médecine
 3e adresse e-mail
 1205 Genève

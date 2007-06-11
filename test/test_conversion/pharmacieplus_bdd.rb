@@ -102,7 +102,7 @@ module XmlConv
     <livraison>
       <last-name>Pharmacie du Mandement</last-name>
       <first-name> </first-name>
-      <other-name> </other-name>
+      <other-name> Madame Françoise Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1242</zip>
@@ -135,7 +135,7 @@ module XmlConv
     <livraison>
       <last-name>Pharm. Ecole-de-Médecine</last-name>
       <first-name> </first-name>
-      <other-name> </other-name>
+      <other-name> Monsieur Frédéric Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1205</zip>
@@ -185,11 +185,12 @@ module XmlConv
         assert_instance_of(Model::Party, shipto)
         name = shipto.name
         assert_instance_of(Model::Name, name)
-        expected = "Pharmacie du Mandement"
+        expected = "Madame Françoise Recipient"
         assert_equal(expected, name.to_s)
         address = shipto.address
         assert_instance_of(Model::Address, address)
-        assert_equal(["3e adresse e-mail"], address.lines)
+        assert_equal(["Pharmacie du Mandement", "3e adresse e-mail"], 
+                     address.lines)
         assert_equal("1242", address.zip_code)
         assert_equal("Satigny", address.city)
         assert_equal(7, delivery.items.size)
@@ -213,8 +214,10 @@ module XmlConv
         assert_instance_of(Model::Party, customer)
         name = customer.name
         assert_instance_of(Model::Name, name)
-        expected = "Pharm. Ecole-de-Médecine"
+        expected = "Monsieur Frédéric Recipient"
         assert_equal(expected, name.to_s)
+        expected = "Pharm. Ecole-de-Médecine"
+        assert_equal(expected, customer.ship_to.address.lines.first)
 			end
     end
   end

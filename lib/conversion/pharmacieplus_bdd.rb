@@ -63,19 +63,23 @@ class << self
   def _delivery_add_xml_customer(delivery, xml_delivery)
     customer = Model::Party.new
     customer.role = 'Customer'
-    ean = 
     _customer_add_party(customer, '1075', 'BillTo')
     ship_to = _customer_add_party(customer, 
                                   _latin1(xml_delivery.attributes['ean']), 
                                   'ShipTo')
     if(xml_header = REXML::XPath.first(xml_delivery, 'livraison'))
       name = Model::Name.new
+      # Pharmacieplus delivers the Pharmacy-Name in 'last-name', and the name
+      # of the contact person in 'other-name' - we need to juggle the pieces 
+      # around a bit. (see also _party_add_xml_address)
+=begin 
       if(xml_name = REXML::XPath.first(xml_header, 'last-name'))
         name.last = _latin1(xml_name.text)
       end
       if(xml_name = REXML::XPath.first(xml_header, 'first-name'))
         name.first = _latin1(xml_name.text)
       end
+=end
       if(xml_name = REXML::XPath.first(xml_header, 'other-name'))
         name.text = _latin1(xml_name.text)
       end
@@ -116,6 +120,9 @@ class << self
       address = Model::Address.new
       address.zip_code = _text(xml_address, 'zip')
       address.city = _text(xml_address, 'city')
+      if(xml_name = REXML::XPath.first(xml_header, 'last-name'))
+        address.add_line(_latin1(xml_name.text))
+      end
       if(line = _text(xml_address, 'street'))
         address.add_line(line)
       end

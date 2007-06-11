@@ -104,7 +104,7 @@ module XmlConv
     <livraison>
       <last-name>Pharmacie du Mandement</last-name>
       <first-name> </first-name>
-      <other-name> </other-name>
+      <other-name> Madame Françoise Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1242</zip>
@@ -183,7 +183,7 @@ module XmlConv
         i2_docs = Conversion::BddI2.convert(bdd)
         assert_instance_of(Array, i2_docs)
         i2_doc = i2_docs.first
-        assert_match(/^Pharmacie_du_Mandement_.*\.dat/, i2_doc.filename)
+        assert_match(/^Madame_Franoise_Recipient_.*\.dat/, i2_doc.filename)
         result = i2_doc.to_s.split("\n")
         expected = <<-EOS
 001:7601001000681
@@ -198,7 +198,8 @@ module XmlConv
 202:1075
 201:DP
 202:7601001368095
-220:Pharmacie du Mandement
+220:Madame Françoise Recipient
+221:Pharmacie du Mandement
 222:3e adresse e-mail
 223:Satigny
 225:1242
