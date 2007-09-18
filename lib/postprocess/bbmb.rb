@@ -6,14 +6,23 @@ require 'drb'
 module XmlConv
   module PostProcess
     module Bbmb
-      def Bbmb.inject(drb_url, name_short, inject_id, transaction)
+      def Bbmb.inject(drb_url, name_short, inject_id, transaction=nil)
+        ## inject with 4 arguments is a special case where the recipient is 
+        #  not known in BBMB. In all other cases we can take the inject_id
+        #  directly from customer.acc_id. If so, inject is called with 
+        #  3 arguments, with transaction as the third argument.
+        if(transaction.nil?)
+          transaction = inject_id
+          inject_id = nil
+        end
         if(bdd = transaction.model)
           bbmb = DRbObject.new(nil, drb_url)
           bdd.deliveries.each { |delivery|
             begin
+              iid  = inject_id || delivery.customer.acc_id
               order = order(delivery)
               info = info(delivery)
-              bbmb.inject_order(name_short, inject_id, order, info)
+              bbmb.inject_order(name_short, iid, order, info)
             rescue Exception => e
               message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \
