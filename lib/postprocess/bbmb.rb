@@ -53,7 +53,7 @@ module XmlConv
                 when 'lieferantenartikel'
                   :article_number
                 end
-          memo.store(key, value)
+          memo.store(key, value.gsub(/^0+/, ''))
           memo
         }
       end
