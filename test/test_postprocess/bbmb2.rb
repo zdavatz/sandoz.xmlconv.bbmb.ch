@@ -275,7 +275,7 @@ Pharm. Ecole-de-Médecine
       <wbmb:auftrag_info xsi:type="enc:Array" enc:arrayType="wbmb:info[5]">
         <wbmb:info>
           <wbmb:infotype>text</wbmb:infotype>
-          <wbmb:infovalue>Diese Bestellung ist dringend!</wbmb:infovalue>
+          <wbmb:infovalue>\344h... Diese Bestellung ist dringend!</wbmb:infovalue>
         </wbmb:info>
         <wbmb:info>
           <wbmb:infotype>lieferung_bis</wbmb:infotype>
@@ -342,7 +342,7 @@ Pharm. Ecole-de-Médecine
           {
             :reference => "10019",
             :comment => <<-EOS.strip
-Diese Bestellung ist dringend!
+äh... Diese Bestellung ist dringend!
 
 ywesee
 intellectual capital connected

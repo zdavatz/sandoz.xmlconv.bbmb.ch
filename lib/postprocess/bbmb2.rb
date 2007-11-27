@@ -2,6 +2,7 @@
 # PostProcess::Bbmb2 -- xmlconv2 -- 25.08.2006 -- hwyss@ywesee.com
 
 require 'drb'
+require 'iconv'
 
 module XmlConv
   module PostProcess
@@ -62,7 +63,7 @@ module XmlConv
       end
       def Bbmb2.info(delivery)
         info = {
-          :reference => delivery.customer_id,
+          :reference => iconv(delivery.customer_id),
         }
         lines = []
         if(text = delivery.free_text)
@@ -77,8 +78,12 @@ module XmlConv
           end
         end
         lines.compact!
-        info.store(:comment, lines.join("\n")) unless lines.empty?
+        info.store(:comment, iconv(lines.join("\n"))) unless lines.empty?
         info
+      end
+      def Bbmb2.iconv(str)
+        @iconv ||= Iconv.new('utf8', 'latin1')
+        @iconv.iconv str
       end
     end
   end
