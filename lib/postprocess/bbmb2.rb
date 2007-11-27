@@ -9,6 +9,7 @@ module XmlConv
       def Bbmb2.inject(drb_url, transaction)
         if(bdd = transaction.model)
           bbmb = DRbObject.new(nil, drb_url)
+          messages = []
           bdd.deliveries.each { |delivery|
             begin
               customer = delivery.customer
@@ -31,9 +32,11 @@ module XmlConv
                 message << "\ninfo: \n"
                   info.each { |k,v| message << "#{k} => #{v}\n" }
               end
-              raise message
             end
           }
+          unless messages.empty?
+            raise messages.join("\n\n")
+          end
         end
       end
       def Bbmb2.item_ids(item)
