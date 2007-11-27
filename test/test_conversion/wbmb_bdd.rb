@@ -62,7 +62,7 @@ module XmlConv
           <wbmb:artikelpreis>6.20</wbmb:artikelpreis>
         </wbmb:artikel>
       </wbmb:artikelliste>
-      <wbmb:auftrag_info xsi:type="enc:Array" enc:arrayType="wbmb:info[4]">
+      <wbmb:auftrag_info xsi:type="enc:Array" enc:arrayType="wbmb:info[5]">
         <wbmb:info>
           <wbmb:infotype>text</wbmb:infotype>
           <wbmb:infovalue>Diese Bestellung ist dringend!</wbmb:infovalue>
@@ -126,11 +126,13 @@ module XmlConv
         customer = delivery.customer
         assert_instance_of(Model::Party, customer)
         assert_equal('ywesee Testspitäler', customer.name.to_s)
-        assert_equal('99', delivery.bsr_id)
+        assert_equal('99', customer.acc_id)
         assert_equal('10019', delivery.customer_id)
         seller = delivery.seller
         assert_equal('76', delivery.acc_id)
         assert_equal('7601001000681', seller.acc_id)
+        assert_equal(1, delivery.items.size)
+        assert_equal("Diese Bestellung ist dringend!", delivery.free_text)
       end
       def test_parse
         auftrag = WbmbBdd.parse(@src)

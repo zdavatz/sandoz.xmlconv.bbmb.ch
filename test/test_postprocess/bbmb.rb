@@ -166,7 +166,7 @@ module XmlConv
 				xml_doc = REXML::Document.new(src)
 				bdd = Conversion::PharmaciePlusBdd.convert(xml_doc)
         transaction = FlexMock.new
-        transaction.mock_handle(:model) { bdd }
+        transaction.should_receive(:model).and_return { bdd }
         bbmb = FlexMock.new
         expected_orders = [
           [
@@ -209,7 +209,8 @@ Pharm. Ecole-de-Médecine
             EOS
           },
         ]
-        bbmb.mock_handle(:inject_order, 2) { |short, id, order, info|
+        bbmb.should_receive(:inject_order).times(2)\
+          .and_return { |short, id, order, info|
           assert_equal('gag', short)
           assert_equal('221200', id)
           assert_equal(expected_orders.shift, order)
@@ -217,7 +218,6 @@ Pharm. Ecole-de-Médecine
         }
         svc = DRb.start_service('druby://localhost:0', bbmb)
         Bbmb.inject(svc.uri, 'gag', '221200', transaction)
-        bbmb.mock_verify
       ensure
         svc.stop_service
       end 

@@ -63,6 +63,7 @@ class << self
         customer.add_id('email', value)
       when 'kundennummer'
         party.add_id('ACC', value)
+        customer.add_id('ACC', value)
       when 'name'
         name = Model::Name.new
         name.text = value
