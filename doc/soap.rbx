@@ -36,7 +36,7 @@ begin
   transaction.domain = ENV['HTTP_HOST']
 	transaction.input = xml_src
 	transaction.reader = 'WbmbBdd'
-	transaction.writer = 'BddI2'
+	transaction.writer = ENV['WRITER']
 	transaction.destination = destination
 	transaction.origin = "http://#{connection.remote_ip}:#{connection.remote_port}"
   transaction.partner = 'SOAP'
