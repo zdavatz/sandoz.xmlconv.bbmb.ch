@@ -1,0 +1,2 @@
+#!/bin/sh
+exec rcov -Ilib -I ../xmlconv/lib/ test/suite.rb ../xmlconv/test/suite.rb

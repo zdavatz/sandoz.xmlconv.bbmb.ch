@@ -215,9 +215,12 @@ Pharm. Ecole-de-Médecine
           assert_equal('221200', id)
           assert_equal(expected_orders.shift, order)
           assert_equal(expected_infos.shift, info)
+          raise "some error"
         }
         svc = DRb.start_service('druby://localhost:0', bbmb)
-        Bbmb.inject(svc.uri, 'gag', '221200', transaction)
+        assert_raises(RuntimeError) {
+          Bbmb.inject(svc.uri, 'gag', '221200', transaction)
+        }
       ensure
         svc.stop_service
       end 

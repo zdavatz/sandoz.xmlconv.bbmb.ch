@@ -14,28 +14,45 @@ module XmlConv
 		class TestBddI2 < Test::Unit::TestCase
 			def test_convert
         agreement = FlexMock.new
-        agreement.mock_handle(:terms_cond) { 'camion' }
+        agreement.should_receive(:terms_cond)\
+          .times(1).and_return { 'camion' }
         bsr = FlexMock.new
-        bsr.mock_handle(:interface) { }
-        bsr.mock_handle(:customer) { }
+        bsr.should_receive(:interface)\
+          .times(1).and_return { }
+        bsr.should_receive(:customer)\
+          .times(1).and_return { }
 				delivery = FlexMock.new
-        delivery.mock_handle(:bsr) { bsr }
-				delivery.mock_handle(:bsr_id) { 'BSR-ID' }
-				delivery.mock_handle(:customer_id) { '1234' }
-				delivery.mock_handle(:customer) {}
-				delivery.mock_handle(:seller) {}
-				delivery.mock_handle(:free_text) {}
-				delivery.mock_handle(:delivery_date) {}
-				delivery.mock_handle(:transport_cost) {}
-				delivery.mock_handle(:agreement) { agreement }
-				delivery.mock_handle(:items) { [] }
+        delivery.should_receive(:bsr)\
+          .times(1).and_return { bsr }
+				delivery.should_receive(:bsr_id)\
+          .times(1).and_return { 'BSR-ID' }
+				delivery.should_receive(:customer_id)\
+          .times(1).and_return { '1234' }
+				delivery.should_receive(:customer)\
+          .times(1).and_return {}
+				delivery.should_receive(:seller)\
+          .times(1).and_return {}
+				delivery.should_receive(:free_text)\
+          .times(1).and_return {}
+				delivery.should_receive(:delivery_date)\
+          .times(1).and_return {}
+				delivery.should_receive(:transport_cost)\
+          .times(1).and_return {}
+				delivery.should_receive(:agreement)\
+          .times(1).and_return { agreement }
+				delivery.should_receive(:items)\
+          .times(1).and_return { [] }
         customer = FlexMock.new
-        customer.mock_handle(:acc_id) { 'YWESEEPP' }
+        customer.should_receive(:acc_id)\
+          .times(1).and_return { 'YWESEEPP' }
         gbsr = FlexMock.new
-        gbsr.mock_handle(:customer) { customer }
+        gbsr.should_receive(:customer)\
+          .times(1).and_return { customer }
 				bdd = FlexMock.new
-				bdd.mock_handle(:deliveries) { [delivery] }
-        bdd.mock_handle(:bsr) { gbsr }
+				bdd.should_receive(:deliveries)\
+          .times(1).and_return { [delivery] }
+        bdd.should_receive(:bsr)\
+          .times(1).and_return { gbsr }
 				i2s = BddI2.convert(bdd)
         assert_instance_of(Array, i2s)
         i2 = i2s.first
@@ -47,24 +64,34 @@ module XmlConv
 			def test__doc_add_delivery
 				doc = I2::Document.new
         agreement = FlexMock.new
-        agreement.mock_handle(:terms_cond) { 'camion' }
+        agreement.should_receive(:terms_cond)\
+          .times(1).and_return { 'camion' }
 				delivery = FlexMock.new
-				delivery.mock_handle(:customer_id) { 'Customer-Delivery-Id' }
-				delivery.mock_handle(:bsr) { }
-				delivery.mock_handle(:bsr_id) { 'BSR-ID' }
-				delivery.mock_handle(:customer) {}
-				delivery.mock_handle(:delivery_date) {}
-				delivery.mock_handle(:transport_cost) {}
-				delivery.mock_handle(:seller) {}
-				delivery.mock_handle(:free_text) {}
-				delivery.mock_handle(:agreement) { agreement }
-				delivery.mock_handle(:items) { [] }
+				delivery.should_receive(:customer_id)\
+          .times(1).and_return { 'Customer-Delivery-Id' }
+				delivery.should_receive(:bsr)\
+          .times(1).and_return { }
+				delivery.should_receive(:bsr_id)\
+          .times(1).and_return { 'BSR-ID' }
+				delivery.should_receive(:customer)\
+          .times(1).and_return {}
+				delivery.should_receive(:delivery_date)\
+          .times(1).and_return {}
+				delivery.should_receive(:transport_cost)\
+          .times(1).and_return {}
+				delivery.should_receive(:seller)\
+          .times(1).and_return {}
+				delivery.should_receive(:free_text)\
+          .times(1).and_return {}
+				delivery.should_receive(:agreement)\
+          .times(1).and_return { agreement }
+				delivery.should_receive(:items)\
+          .times(1).and_return { [] }
 				BddI2._doc_add_delivery(doc, delivery)
 				order = doc.orders.first
 				assert_equal('YWESEE', order.sender_id)
 				assert_equal('Customer-Delivery-Id', order.delivery_id)
 				assert_equal(:default, order.terms_cond)
-				delivery.mock_verify
 			end
 			def test__order_add_customer
 				order = Mock.new('Order')
@@ -74,13 +101,18 @@ module XmlConv
 				ship_to = FlexMock.new('ShipTo')
 				bill_addr = FlexMock.new('BillAddress')
 				ship_addr = FlexMock.new('ShipAddress')
-				customer.mock_handle(:parties) {
+				customer.should_receive(:parties)\
+          .times(1).and_return {
 					[employee, ship_to, bill_to]
 				}
-				employee.mock_handle(:acc_id) { }
-				employee.mock_handle(:name) { 'EmployeeName' }
-				employee.mock_handle(:role) { 'Employee' }
-				employee.mock_handle(:address) { }
+				employee.should_receive(:acc_id)\
+          .times(1).and_return { }
+				employee.should_receive(:name)\
+          .times(1).and_return { 'EmployeeName' }
+				employee.should_receive(:role)\
+          .times(1).and_return { 'Employee' }
+				employee.should_receive(:address)\
+          .times(1).and_return { }
 				order.__next(:add_address) { |addr|
 					assert_instance_of(I2::Address, addr)
 					assert_equal(:employee, addr.code)
@@ -88,14 +120,22 @@ module XmlConv
 					assert_equal('EmployeeName', addr.name1)
 				}
 
-				ship_to.mock_handle(:acc_id) { }
-				ship_to.mock_handle(:name) { 'Name' }
-				ship_to.mock_handle(:role) { 'ShipTo' }
-				ship_to.mock_handle(:address) { ship_addr }
-				ship_addr.mock_handle(:size) { 0 }
-				ship_addr.mock_handle(:lines) { [] }
-				ship_addr.mock_handle(:city) { 'City' } 
-				ship_addr.mock_handle(:zip_code) { 'ZipCode' } 
+				ship_to.should_receive(:acc_id)\
+          .times(1).and_return { }
+				ship_to.should_receive(:name)\
+          .times(1).and_return { 'Name' }
+				ship_to.should_receive(:role)\
+          .times(1).and_return { 'ShipTo' }
+				ship_to.should_receive(:address)\
+          .times(1).and_return { ship_addr }
+				ship_addr.should_receive(:size)\
+          .times(1).and_return { 0 }
+				ship_addr.should_receive(:lines)\
+          .times(1).and_return { [] }
+				ship_addr.should_receive(:city)\
+          .times(1).and_return { 'City' } 
+				ship_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' } 
 				order.__next(:add_address) { |addr|
 					assert_instance_of(I2::Address, addr)
 					assert_equal(:delivery, addr.code)
@@ -104,14 +144,22 @@ module XmlConv
 					assert_equal('ZipCode', addr.zip_code)
 				}
 
-				bill_to.mock_handle(:acc_id) { 'BillToId' }
-				bill_to.mock_handle(:name) { 'BillToName' }
-				bill_to.mock_handle(:role) { 'BillTo' }
-				bill_to.mock_handle(:address) { bill_addr }
-				bill_addr.mock_handle(:size) { 2 }
-				bill_addr.mock_handle(:lines) { ['BillLine1', 'BillLine2'] }
-				bill_addr.mock_handle(:city) { 'BillCity' } 
-				bill_addr.mock_handle(:zip_code) { 'BillZipCode' } 
+				bill_to.should_receive(:acc_id)\
+          .times(1).and_return { 'BillToId' }
+				bill_to.should_receive(:name)\
+          .times(1).and_return { 'BillToName' }
+				bill_to.should_receive(:role)\
+          .times(1).and_return { 'BillTo' }
+				bill_to.should_receive(:address)\
+          .times(1).and_return { bill_addr }
+				bill_addr.should_receive(:size)\
+          .times(1).and_return { 2 }
+				bill_addr.should_receive(:lines)\
+          .times(1).and_return { ['BillLine1', 'BillLine2'] }
+				bill_addr.should_receive(:city)\
+          .times(1).and_return { 'BillCity' } 
+				bill_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'BillZipCode' } 
 				order.__next(:add_address) { |addr|
 					assert_instance_of(I2::Address, addr)
 					assert_equal(:buyer, addr.code)
@@ -126,28 +174,31 @@ module XmlConv
 
 				BddI2._order_add_customer(order, customer)
 				order.__verify
-				customer.mock_verify
-				employee.mock_verify
-				bill_to.mock_verify
-				bill_addr.mock_verify
-				ship_to.mock_verify
-				ship_addr.mock_verify
 			end
 			def test__order_add_party
 				order = FlexMock.new('Order')
 				party = FlexMock.new('Party')
 				bdd_addr = FlexMock.new('Address')
-				party.mock_handle(:acc_id) { 'id_string' }
-				party.mock_handle(:name) { 'PartyName' }
-				party.mock_handle(:role) { 'Employee' }
-				party.mock_handle(:address) { bdd_addr }
-				bdd_addr.mock_handle(:size) { 2 }
-				bdd_addr.mock_handle(:lines) { 
+				party.should_receive(:acc_id)\
+          .times(1).and_return { 'id_string' }
+				party.should_receive(:name)\
+          .times(1).and_return { 'PartyName' }
+				party.should_receive(:role)\
+          .times(1).and_return { 'Employee' }
+				party.should_receive(:address)\
+          .times(1).and_return { bdd_addr }
+				bdd_addr.should_receive(:size)\
+          .times(1).and_return { 2 }
+				bdd_addr.should_receive(:lines)\
+          .times(1).and_return { 
 					['Line1', 'Line2']	
 				}
-				bdd_addr.mock_handle(:city) { 'City' }
-				bdd_addr.mock_handle(:zip_code) { 'ZipCode' }
-				order.mock_handle(:add_address) { |addr|
+				bdd_addr.should_receive(:city)\
+          .times(1).and_return { 'City' }
+				bdd_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' }
+				order.should_receive(:add_address)\
+          .times(1).and_return { |addr|
 					assert_equal(:employee, addr.code)
 					assert_equal('id_string', addr.party_id)
 					assert_equal('PartyName', addr.name1)
@@ -157,149 +208,187 @@ module XmlConv
 					assert_equal('ZipCode', addr.zip_code)
 				}
 				BddI2._order_add_party(order, party)
-				order.mock_verify
-				party.mock_verify
-				bdd_addr.mock_verify
 			end
 			def test__address_add_bdd_addr__0_lines
 				address = FlexMock.new('Address')
 				bdd_addr = FlexMock.new('BddAddress')
-				bdd_addr.mock_handle(:size) { 0 }
-				bdd_addr.mock_handle(:lines) { [] }
-				bdd_addr.mock_handle(:city) { 'City' }
-				bdd_addr.mock_handle(:zip_code) { 'ZipCode' }
-				address.mock_handle(:city=) { |city| 
+				bdd_addr.should_receive(:size)\
+          .times(1).and_return { 0 }
+				bdd_addr.should_receive(:lines)\
+          .times(1).and_return { [] }
+				bdd_addr.should_receive(:city)\
+          .times(1).and_return { 'City' }
+				bdd_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' }
+				address.should_receive(:city=)\
+          .times(1).and_return { |city| 
 					assert_equal('City', city)
 				}
-				address.mock_handle(:zip_code=) { |zip_code|
+				address.should_receive(:zip_code=)\
+          .times(1).and_return { |zip_code|
 					assert_equal('ZipCode', zip_code)
 				}
 				BddI2._address_add_bdd_addr(address, bdd_addr)
-				address.mock_verify
-				bdd_addr.mock_verify
 			end
 			def test__address_add_bdd_addr__1_line
 				address = FlexMock.new('Address')
 				bdd_addr = FlexMock.new('BddAddress')
-				bdd_addr.mock_handle(:size) { 1 }
-				bdd_addr.mock_handle(:lines) {
+				bdd_addr.should_receive(:size)\
+          .times(1).and_return { 1 }
+				bdd_addr.should_receive(:lines)\
+          .times(1).and_return {
 					['Line1']
 				}
-				bdd_addr.mock_handle(:city) { 'City' }
-				bdd_addr.mock_handle(:zip_code) { 'ZipCode' }
-				address.mock_handle(:street1=) { |line|
+				bdd_addr.should_receive(:city)\
+          .times(1).and_return { 'City' }
+				bdd_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' }
+				address.should_receive(:street1=)\
+          .times(1).and_return { |line|
 					assert_equal('Line1', line)
 				}
-				address.mock_handle(:street2=) { |line|
+				address.should_receive(:street2=)\
+          .times(1).and_return { |line|
 					assert_nil(line)
 				}
-				address.mock_handle(:city=) { |city| 
+				address.should_receive(:city=)\
+          .times(1).and_return { |city| 
 					assert_equal('City', city)
 				}
-				address.mock_handle(:zip_code=) { |zip_code|
+				address.should_receive(:zip_code=)\
+          .times(1).and_return { |zip_code|
 					assert_equal('ZipCode', zip_code)
 				}
 				BddI2._address_add_bdd_addr(address, bdd_addr)
-				address.mock_verify
-				bdd_addr.mock_verify
 			end
 			def test__address_add_bdd_addr__2_lines
 				address = FlexMock.new('Address')
 				bdd_addr = FlexMock.new('BddAddress')
-				bdd_addr.mock_handle(:size) { 2 }
-				bdd_addr.mock_handle(:lines) {
+				bdd_addr.should_receive(:size)\
+          .times(1).and_return { 2 }
+				bdd_addr.should_receive(:lines)\
+          .times(1).and_return {
 					['Line1', 'Line2']
 				}
-				bdd_addr.mock_handle(:city) { 'City' }
-				bdd_addr.mock_handle(:zip_code) { 'ZipCode' }
-				address.mock_handle(:name2=) { |line|
+				bdd_addr.should_receive(:city)\
+          .times(1).and_return { 'City' }
+				bdd_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' }
+				address.should_receive(:name2=)\
+          .times(1).and_return { |line|
 					assert_equal('Line1', line)
 				}
-				address.mock_handle(:street1=) { |line|
+				address.should_receive(:street1=)\
+          .times(1).and_return { |line|
 					assert_equal('Line2', line)
 				}
-				address.mock_handle(:street2=) { |line|
+				address.should_receive(:street2=)\
+          .times(1).and_return { |line|
 					assert_nil(line)
 				}
-				address.mock_handle(:city=) { |city| 
+				address.should_receive(:city=)\
+          .times(1).and_return { |city| 
 					assert_equal('City', city)
 				}
-				address.mock_handle(:zip_code=) { |zip_code|
+				address.should_receive(:zip_code=)\
+          .times(1).and_return { |zip_code|
 					assert_equal('ZipCode', zip_code)
 				}
 				BddI2._address_add_bdd_addr(address, bdd_addr)
-				address.mock_verify
-				bdd_addr.mock_verify
 			end
 			def test__address_add_bdd_addr__3_lines
 				address = FlexMock.new('Address')
 				bdd_addr = FlexMock.new('BddAddress')
-				bdd_addr.mock_handle(:size) { 3 }
-				bdd_addr.mock_handle(:lines) {
+				bdd_addr.should_receive(:size)\
+          .times(1).and_return { 3 }
+				bdd_addr.should_receive(:lines)\
+          .times(1).and_return {
 					['Line1', 'Line2', 'Line3']
 				}
-				bdd_addr.mock_handle(:city) { 'City' }
-				bdd_addr.mock_handle(:zip_code) { 'ZipCode' }
-				address.mock_handle(:name2=) { |name|
+				bdd_addr.should_receive(:city)\
+          .times(1).and_return { 'City' }
+				bdd_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' }
+				address.should_receive(:name2=)\
+          .times(1).and_return { |name|
 					assert_equal('Line1', name)
 				}
-				address.mock_handle(:street1=) { |line|
+				address.should_receive(:street1=)\
+          .times(1).and_return { |line|
 					assert_equal('Line2', line)
 				}
-				address.mock_handle(:street2=) { |line|
+				address.should_receive(:street2=)\
+          .times(1).and_return { |line|
 					assert_equal('Line3', line)
 				}
-				address.mock_handle(:city=) { |city| 
+				address.should_receive(:city=)\
+          .times(1).and_return { |city| 
 					assert_equal('City', city)
 				}
-				address.mock_handle(:zip_code=) { |zip_code|
+				address.should_receive(:zip_code=)\
+          .times(1).and_return { |zip_code|
 					assert_equal('ZipCode', zip_code)
 				}
 				BddI2._address_add_bdd_addr(address, bdd_addr)
-				address.mock_verify
-				bdd_addr.mock_verify
 			end
 			def test__address_add_bdd_addr__more_than_3_lines
 				address = FlexMock.new('Address')
 				bdd_addr = FlexMock.new('BddAddress')
-				bdd_addr.mock_handle(:size) { 9 }
-				bdd_addr.mock_handle(:lines) {
+				bdd_addr.should_receive(:size)\
+          .times(1).and_return { 9 }
+				bdd_addr.should_receive(:lines)\
+          .times(1).and_return {
 					['Line1', 'Line2', 'Line3']
 				}
-				bdd_addr.mock_handle(:city) { 'City' }
-				bdd_addr.mock_handle(:zip_code) { 'ZipCode' }
-				address.mock_handle(:name2=) { |name|
+				bdd_addr.should_receive(:city)\
+          .times(1).and_return { 'City' }
+				bdd_addr.should_receive(:zip_code)\
+          .times(1).and_return { 'ZipCode' }
+				address.should_receive(:name2=)\
+          .times(1).and_return { |name|
 					assert_equal('Line1', name)
 				}
-				address.mock_handle(:street1=) { |line|
+				address.should_receive(:street1=)\
+          .times(1).and_return { |line|
 					assert_equal('Line2', line)
 				}
-				address.mock_handle(:street2=) { |line|
+				address.should_receive(:street2=)\
+          .times(1).and_return { |line|
 					assert_equal('Line3', line)
 				}
-				address.mock_handle(:city=) { |city| 
+				address.should_receive(:city=)\
+          .times(1).and_return { |city| 
 					assert_equal('City', city)
 				}
-				address.mock_handle(:zip_code=) { |zip_code|
+				address.should_receive(:zip_code=)\
+          .times(1).and_return { |zip_code|
 					assert_equal('ZipCode', zip_code)
 				}
 				BddI2._address_add_bdd_addr(address, bdd_addr)
-				address.mock_verify
-				bdd_addr.mock_verify
 			end
 			def test__order_add_item__no_date
 				order = FlexMock.new('Order')
 				item = FlexMock.new('Item')
-				item.mock_handle(:line_no) { 'LineNo' }
-				item.mock_handle(:et_nummer_id) { 'EtNummerId' }
-				item.mock_handle(:pharmacode_id) { 'Pharmacode' }
-				item.mock_handle(:customer_id) { '12345' }
-				item.mock_handle(:qty) { 17 }
-				item.mock_handle(:unit) { }
-				item.mock_handle(:delivery_date) { }
-				item.mock_handle(:get_price) { }
-				item.mock_handle(:free_text) { }
-				order.mock_handle(:add_position) { |position|
+				item.should_receive(:line_no)\
+          .times(1).and_return { 'LineNo' }
+				item.should_receive(:et_nummer_id)\
+          .times(1).and_return { 'EtNummerId' }
+				item.should_receive(:pharmacode_id)\
+          .times(1).and_return { 'Pharmacode' }
+				item.should_receive(:customer_id)\
+          .times(1).and_return { '12345' }
+				item.should_receive(:qty)\
+          .times(1).and_return { 17 }
+				item.should_receive(:unit)\
+          .times(1).and_return { }
+				item.should_receive(:delivery_date)\
+          .times(1).and_return { }
+				item.should_receive(:get_price)\
+          .times(1).and_return { }
+				item.should_receive(:free_text)\
+          .times(1).and_return { }
+				order.should_receive(:add_position)\
+          .times(1).and_return { |position|
 					assert_instance_of(I2::Position, position)
 					assert_equal('LineNo', position.number)
 					assert_equal('12345', position.article_ean)
@@ -308,28 +397,37 @@ module XmlConv
 					assert_nil(position.delivery_date)
 				}
 				BddI2._order_add_item(order, item)
-				order.mock_verify
-				item.mock_verify
 			end
 			def test__order_add_item
 				order = FlexMock.new('Order')
 				item = FlexMock.new('Item')
 				a_date = Date.new(1975,8,21)
-				item.mock_handle(:line_no) { 'LineNo' }
-				item.mock_handle(:et_nummer_id) { 'EtNummerId' }
-				item.mock_handle(:pharmacode_id) { 'Pharmacode' }
-				item.mock_handle(:customer_id) { '12345' }
-				item.mock_handle(:qty) { 17 }
-				item.mock_handle(:unit) { 'STK' }
-				item.mock_handle(:free_text) { }
-				item.mock_handle(:delivery_date) { a_date }
+				item.should_receive(:line_no)\
+          .times(1).and_return { 'LineNo' }
+				item.should_receive(:et_nummer_id)\
+          .times(1).and_return { 'EtNummerId' }
+				item.should_receive(:pharmacode_id)\
+          .times(1).and_return { 'Pharmacode' }
+				item.should_receive(:customer_id)\
+          .times(1).and_return { '12345' }
+				item.should_receive(:qty)\
+          .times(1).and_return { 17 }
+				item.should_receive(:unit)\
+          .times(1).and_return { 'STK' }
+				item.should_receive(:free_text)\
+          .times(1).and_return { }
+				item.should_receive(:delivery_date)\
+          .times(1).and_return { a_date }
         price = FlexMock.new('Price')
-        price.mock_handle(:amount) { '780.00' }
-        item.mock_handle(:get_price) { |type|
+        price.should_receive(:amount)\
+          .times(1).and_return { '780.00' }
+        item.should_receive(:get_price)\
+          .times(1).and_return { |type|
           assert_equal('NettoPreis', type)
           price
         }
-				order.mock_handle(:add_position) { |position|
+				order.should_receive(:add_position)\
+          .times(1).and_return { |position|
 					assert_instance_of(I2::Position, position)
 					assert_equal('LineNo', position.number)
 					assert_equal('12345', position.article_ean)
@@ -342,8 +440,6 @@ module XmlConv
           assert_equal('780.00', position.price)
 				}
 				BddI2._order_add_item(order, item)
-				order.mock_verify
-				item.mock_verify
 			end
 		end
 	end

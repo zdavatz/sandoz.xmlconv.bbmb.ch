@@ -12,20 +12,25 @@ module XmlConv
     class TestSoap < Test::Unit::TestCase
       def test_update_partner
         customer = FlexMock.new
-        customer.mock_handle(:acc_id) { 'SOAPPartner' }
+        customer.should_receive(:acc_id)\
+          .times(1).and_return { 'SOAPPartner' }
         bsr = FlexMock.new
-        bsr.mock_handle(:customer) { customer }
+        bsr.should_receive(:customer)\
+          .times(1).and_return { customer }
         delivery = FlexMock.new
-        delivery.mock_handle(:bsr) { bsr }
+        delivery.should_receive(:bsr)\
+          .times(1).and_return { bsr }
         model = FlexMock.new
-        model.mock_handle(:deliveries) { [delivery] }
+        model.should_receive(:deliveries)\
+          .times(1).and_return { [delivery] }
         transaction = FlexMock.new
-        transaction.mock_handle(:model) { model }
-        transaction.mock_handle(:partner=, 1) { |partner|
+        transaction.should_receive(:model)\
+          .times(1).and_return { model }
+        transaction.should_receive(:partner=, 1)\
+          .times(1).and_return { |partner|
           assert_equal('SOAPPartner', partner)
         }
         Soap.update_partner(transaction)
-        transaction.mock_verify
       end
     end
   end
