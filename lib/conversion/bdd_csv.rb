@@ -14,6 +14,10 @@ class BddCsv
         _to_csv(delivery)
       }
     end
+    def _formatted_comment(str, replacement=' ')
+      str = str.to_s
+      u(str.gsub(/[\r\n]+/, replacement))[0,60] unless(str.empty?)
+    end
     def _to_csv(delivery)
       result = Model::Document.new
       customer_id, customer_ean13, commit_id, price = nil
@@ -41,7 +45,7 @@ class BddCsv
             item.qty,
             price,
             delivery.customer_id,
-            delivery.free_text,
+            _formatted_comment(delivery.free_text),
           ]
         }
       }
