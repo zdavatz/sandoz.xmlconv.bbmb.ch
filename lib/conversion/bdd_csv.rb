@@ -22,11 +22,14 @@ class BddCsv
       result = Model::Document.new
       customer_id, customer_ean13, commit_id, price = nil
       if(customer = delivery.customer)
-        result.prefix = customer_ean13 = customer.acc_id
+        result.prefix = customer_id = customer.ids['supplier']
+        customer_ean13 = customer.acc_id
       end
       if(customer = delivery.bsr.customer)
-        result.prefix = customer_ean13 ||= customer.acc_id
+        customer_ean13 ||= customer.acc_id
+        result.prefix = customer_id ||= customer.ids['supplier']
       end
+      result.prefix ||= customer_ean13
       CSV::Writer.generate(result, 
                            XmlConv::CONFIG.target_format_fs,
                            XmlConv::CONFIG.target_format_rs) { |writer|

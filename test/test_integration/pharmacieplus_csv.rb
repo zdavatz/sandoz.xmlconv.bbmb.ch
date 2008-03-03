@@ -179,11 +179,12 @@ class TestXmlI2 < Test::Unit::TestCase
     end
   end
   def test_pharmacieplus_csv
+    XmlConv::CONFIG.default_filename = "%s%s_%s.txt"
     bdd = Conversion::PharmaciePlusBdd.convert(@xml_doc)
     csv_docs = Conversion::BddCsv.convert(bdd)
     assert_instance_of(Array, csv_docs)
     csv_doc = csv_docs.first
-    assert_match(/^7601001368095_.*\.dat/, csv_doc.filename)
+    assert_match(/^7601001368095_.*\.txt/, csv_doc.filename)
     result = csv_doc.to_s.split("\n")
     dstr = Date.today.strftime("%d%m%Y")
     expected = <<-EOS

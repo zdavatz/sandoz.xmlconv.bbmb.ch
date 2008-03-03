@@ -85,7 +85,7 @@ mge=2
         assert_equal('100446', delivery.customer_id)
         assert_equal('123456', delivery.bsr_id)
         customer = delivery.customer
-        assert_equal('123456', customer.acc_id)
+        assert_equal('123456', customer.ids['customer'])
         seller = delivery.seller
         assert_equal('7601001000681', seller.acc_id)
         assert_equal(9, delivery.items.size)

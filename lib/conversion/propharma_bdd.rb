@@ -59,14 +59,18 @@ class << self
   def _bsr_add_customer_id(bsr, id)
     customer = Model::Party.new
     customer.role = 'Customer'
-    customer.add_id('ACC', id)
+    ## Propharma sends the Supplier-side Customer-ID, not the public EAN13 as it 
+    #  is the case in Propharma -> Globopharm
+    customer.add_id('supplier', id)
     bsr.add_party(customer)
   end
   def _delivery_add_customer(delivery, ast)
     _bsr_add_customer_id(delivery.bsr, _named_data(:cid, ast))
     customer = Model::Party.new
     customer.role = "Customer"
-    customer.add_id('ACC', _named_data(:cid, ast))
+    ## Propharma sends the Supplier-side Customer-ID, not the public EAN13 as it 
+    #  is the case in Propharma -> Globopharm
+    customer.add_id('customer', _named_data(:cid, ast))
     name = Model::Name.new
     name.text = _named_data(:cname, ast)
     customer.name = name
