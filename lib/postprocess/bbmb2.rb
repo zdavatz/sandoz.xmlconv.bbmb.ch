@@ -18,7 +18,7 @@ module XmlConv
               inject_id ||= customer.ship_to.acc_id
               order = order(delivery)
               info = info(delivery)
-              bbmb.inject_order(inject_id, order, info)
+              bbmb.inject_order(inject_id, order, info, :deliver => true)
             rescue Exception => e
               message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \
