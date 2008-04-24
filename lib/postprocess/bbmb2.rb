@@ -12,6 +12,7 @@ module XmlConv
           bbmb = DRbObject.new(nil, drb_url)
           messages = []
           bdd.deliveries.each { |delivery|
+            inject_id, order, info = nil
             begin
               customer = delivery.customer
               inject_id = customer.acc_id
@@ -33,6 +34,7 @@ module XmlConv
                 message << "\ninfo: \n"
                   info.each { |k,v| message << "#{k} => #{v}\n" }
               end
+              messages.push message
             end
           }
           unless messages.empty?
