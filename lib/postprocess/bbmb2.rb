@@ -16,7 +16,8 @@ module XmlConv
             begin
               customer = delivery.customer
               inject_id = customer.acc_id
-              inject_id ||= customer.ship_to.acc_id
+              inject_id ||= customer.ship_to.acc_id if customer.ship_to
+              inject_id ||= customer.party_id
               order = order(delivery)
               info = info(delivery)
               bbmb.inject_order(inject_id, order, info, :deliver => true)
