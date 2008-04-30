@@ -70,18 +70,8 @@ module XmlConv
         }
         lines = []
         if(text = delivery.free_text)
-          lines.push text, ''
+          info.store(:comment, iconv(text))
         end
-        if((cust = delivery.customer) && ship = cust.ship_to)
-          lines.push(ship.acc_id)
-          lines.push(ship.name)
-          if(addr = ship.address)
-            lines.concat(addr.lines)
-            lines.push([addr.zip_code, addr.city].compact.join(' '))
-          end
-        end
-        lines.compact!
-        info.store(:comment, iconv(lines.join("\n"))) unless lines.empty?
         info
       end
       def Bbmb2.iconv(str)
