@@ -169,6 +169,7 @@ module XmlConv
 				bdd = Conversion::PharmaciePlusBdd.convert(xml_doc)
         transaction = FlexMock.new
         transaction.should_receive(:model).and_return { bdd }
+        transaction.should_receive(:status=).with(:bbmb_ok).times(1)
         bbmb = FlexMock.new
         expected_ids = %w{7601001368095 7601001368491}
         expected_orders = [
@@ -193,23 +194,9 @@ module XmlConv
         expected_infos = [
           {
             :reference  => "1861", 
-            :comment    => <<-EOS.strip
-7601001368095
-Monsieur Frédéric Recipient
-Pharmacie du Mandement
-3e adresse e-mail
-1242 Satigny
-            EOS
           },
           {
             :reference  => "1861", 
-            :comment    => <<-EOS.strip
-7601001368491
-Madame Françoise Recipient
-Pharm. Ecole-de-Médecine
-3e adresse e-mail
-1205 Genève
-            EOS
           },
         ]
         bbmb.should_receive(:inject_order).times(2)\
@@ -331,6 +318,7 @@ Pharm. Ecole-de-Médecine
 				bdd = Conversion::WbmbBdd.convert(soap)
         transaction = FlexMock.new
         transaction.should_receive(:model).and_return { bdd }
+        transaction.should_receive(:status=).with(:bbmb_ok).times(1)
         bbmb = FlexMock.new
         expected_orders = [
           [
@@ -342,13 +330,7 @@ Pharm. Ecole-de-Médecine
           {
             :reference => "10019",
             :comment => <<-EOS.strip
-äh... Diese Bestellung ist dringend!
-
-ywesee
-intellectual capital connected
-Postfach 1234
-Winterthurerstrasse 52
-8006 Zuerich
+\303\244h... Diese Bestellung ist dringend!
             EOS
           },
         ]
@@ -423,6 +405,7 @@ mge=2
 				bdd = Conversion::ProPharmaBdd.convert(parsed)
         transaction = FlexMock.new
         transaction.should_receive(:model).and_return { bdd }
+        transaction.should_receive(:status=).with(:bbmb_ok).times(1)
         bbmb = FlexMock.new
         expected_orders = [
           [
