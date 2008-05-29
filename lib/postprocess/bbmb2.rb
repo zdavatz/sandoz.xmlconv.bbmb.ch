@@ -41,6 +41,7 @@ module XmlConv
           unless messages.empty?
             raise messages.join("\n\n")
           end
+          transaction.status = :bbmb_ok
         end
       end
       def Bbmb2.item_ids(item)
