@@ -106,7 +106,7 @@ class << self
     item.line_no = _latin1(delivery.items.size.next.to_s)
     item.add_id('ET-Nummer', _latin1(xml_item.attributes['ean']))
     item.add_id('Pharmacode', _latin1(xml_item.attributes['pharmacode']))
-    item.qty = _latin1(xml_item.attributes['qte-livraison'])
+    item.qty = _latin1(xml_item.attributes['qte-facture'])
     item.unit = 'PCE'
     delivery.add_item(item)
   end

@@ -200,7 +200,7 @@ module XmlConv
         assert_equal('1', item.line_no)
         assert_equal('7680543801949', item.et_nummer_id)
         assert_equal('2054098', item.pharmacode_id)
-        assert_equal('15', item.qty)
+        assert_equal('10', item.qty)
 
 				#bsr = delivery.bsr
 				#assert_instance_of(Model::Bsr, bsr)
