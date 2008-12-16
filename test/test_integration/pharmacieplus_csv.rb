@@ -166,7 +166,7 @@ class TestXmlI2 < Test::Unit::TestCase
 </commande>
     XML
     @xml_doc = REXML::Document.new(@src)
-    @target_dir = File.expand_path('data/pharmacieplus_i2', 
+    @target_dir = File.expand_path('data/pharmacieplus_csv',
       File.dirname(__FILE__))
     clear_dir
   end

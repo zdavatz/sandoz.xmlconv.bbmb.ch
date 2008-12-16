@@ -14,7 +14,7 @@ module XmlConv
   module Integration
 class TestProPharmaI2 < Test::Unit::TestCase
   def setup
-    @target_dir = File.expand_path('data/propharma_i2', 
+    @target_dir = File.expand_path('data/propharma_csv',
       File.dirname(__FILE__))
     clear_dir
   end
