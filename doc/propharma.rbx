@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# sunstore.rbx -- xmlconv2 -- 07.06.2004 -- hwyss@ywesee.com
+# propharma.rbx -- xmlconv2 -- 07.06.2004 -- hwyss@ywesee.com
 
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 
@@ -39,7 +39,7 @@ begin
 	transaction.writer = ENV['WRITER']
 	transaction.destination = destination
 	transaction.origin = "http://#{connection.remote_ip}:#{connection.remote_port}"
-  transaction.partner = 'SunStore'
+  transaction.partner = 'ProPharma'
   transaction.postprocs.push(['Soap', 'update_partner'])
   transaction.postprocs.push(['Bbmb2', 'inject', ENV['ACCESS_BBMB']])
 
