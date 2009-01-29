@@ -19,12 +19,21 @@ module XmlConv
             begin
               customer = delivery.customer
               inject_id = customer.acc_id
-              inject_id ||= customer.ship_to.acc_id if customer.ship_to
+              name = customer.name
+              if ship = customer.ship_to
+                name = ship.name
+                if addr = ship.address
+                  name = addr.lines.first
+                end
+                inject_id ||= ship_to.acc_id
+              end
               inject_id ||= customer.party_id
               order = order(delivery)
               info = info(delivery)
               bbmb.inject_order(inject_id, order, info, :deliver => true,
-                                :create_missing_customer => idtype)
+                                :create_missing_customer => idtype,
+                                :transaction => transaction.transaction_id,
+                                :customer_name => name)
             rescue Exception => e
               message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \
