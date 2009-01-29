@@ -7,7 +7,10 @@ require 'iconv'
 module XmlConv
   module PostProcess
     module Bbmb2
-      def Bbmb2.inject(drb_url, transaction)
+      def Bbmb2.inject(drb_url, idtype, transaction=nil)
+        if transaction.nil?
+          transaction, idtype = idtype, nil
+        end
         if(bdd = transaction.model)
           bbmb = DRbObject.new(nil, drb_url)
           messages = []
@@ -20,7 +23,8 @@ module XmlConv
               inject_id ||= customer.party_id
               order = order(delivery)
               info = info(delivery)
-              bbmb.inject_order(inject_id, order, info, :deliver => true)
+              bbmb.inject_order(inject_id, order, info, :deliver => true,
+                                :create_missing_customer => idtype)
             rescue Exception => e
               message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \

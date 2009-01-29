@@ -41,7 +41,8 @@ begin
 	transaction.origin = "http://#{connection.remote_ip}:#{connection.remote_port}"
   transaction.partner = 'ProPharma'
   transaction.postprocs.push(['Soap', 'update_partner'])
-  transaction.postprocs.push(['Bbmb2', 'inject', ENV['ACCESS_BBMB']])
+  transaction.postprocs.push(['Bbmb2', 'inject',
+                              ENV['ACCESS_BBMB'], 'customer_id'])
 
 	xmlconv.dispatch(transaction)
 

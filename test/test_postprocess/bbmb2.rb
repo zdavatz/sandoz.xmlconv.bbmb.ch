@@ -206,7 +206,7 @@ module XmlConv
           assert_equal(expected_infos.shift, info)
         }
         svc = DRb.start_service('druby://localhost:0', bbmb)
-        Bbmb2.inject(svc.uri, transaction)
+        Bbmb2.inject(svc.uri, 'ean13', transaction)
       ensure
         svc.stop_service
       end 
@@ -432,7 +432,7 @@ mge=2
           assert_equal(expected_infos.shift, info)
         }
         svc = DRb.start_service('druby://localhost:0', bbmb)
-        Bbmb2.inject(svc.uri, transaction)
+        Bbmb2.inject(svc.uri, 'customer_id', transaction)
       #ensure
         #svc.stop_service
       end 
