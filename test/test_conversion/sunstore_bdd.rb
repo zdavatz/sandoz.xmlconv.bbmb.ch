@@ -6,6 +6,7 @@ $: << File.expand_path('../../lib', File.dirname(__FILE__))
 
 require 'test/unit'
 require 'conversion/sunstore_bdd'
+require 'xmlconv/util/transaction'
 
 module XmlConv
   module Conversion
@@ -72,7 +73,7 @@ module XmlConv
                        "Linkestrasse 99" ],
                      address.lines)
         assert_equal("3322", address.zip_code)
-        assert_equal("Schönbühl", address.city)
+        assert_equal("Sch\366nb\374hl", address.city)
         assert_equal(2, delivery.items.size)
 
         item = delivery.items.first
@@ -88,6 +89,70 @@ module XmlConv
         assert_equal('7680123456789', item.et_nummer_id)
         assert_equal(nil, item.pharmacode_id)
         assert_equal('5', item.qty)
+      end
+      def test_respond
+        transaction = Util::Transaction.new
+        bdd = SunStoreBdd.convert(@xml_doc)
+        response = SunStoreBdd.respond bdd, []
+        assert_instance_of REXML::Document, response
+        output = ''
+        REXML::Formatters::Pretty.new.write response, output
+        assert_equal <<-EOS.strip, output
+<?xml version='1.0' encoding='UTF-8'?>
+<customerOrderResponse backLogDesired='false' language='de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' productDescriptionDesired='false' roundUpForCondition='false' xmlns='http://www.e-galexis.com/schemas/'>
+  <clientErrorResponse/>
+</customerOrderResponse>
+        EOS
+
+        response = SunStoreBdd.respond bdd, [ :order_id => '12345-1', 
+                                              :products => [] ]
+        output = ''
+        REXML::Formatters::Pretty.new.write response, output
+        assert_equal <<-EOS.strip, output
+<?xml version='1.0' encoding='UTF-8'?>
+<customerOrderResponse backLogDesired='false' language='de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' productDescriptionDesired='false' roundUpForCondition='false' xmlns='http://www.e-galexis.com/schemas/'>
+  <clientResponse number='12345-1'/>
+  <orderHeaderErrorResponse/>
+</customerOrderResponse>
+        EOS
+
+        products = [ 
+          { :description => 'Product1', 
+            :article_number => '1' },
+          { :description => 'Product2',
+            :article_number => '2' } 
+        ]
+        response = SunStoreBdd.respond bdd, [ :order_id => '12345-1', 
+                                              :products => products ]
+        output = ''
+        REXML::Formatters::Pretty.new.write response, output
+        assert_equal <<-EOS.strip, output
+<?xml version='1.0' encoding='UTF-8'?>
+<customerOrderResponse backLogDesired='false' language='de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' productDescriptionDesired='false' roundUpForCondition='false' xmlns='http://www.e-galexis.com/schemas/'>
+  <clientResponse number='12345-1'/>
+  <orderHeaderResponse referenceNumber='123ABCDE9012345'>
+    <deliveryAddress line1='Superkunde' line5City='SchÃ¶nbÃ¼hl' line5PostalCode='3322' line4='Linkestrasse 99'>
+      <addressLine2And3Text line2='Dorfladen' line3='Frau Muster'/>
+    </deliveryAddress>
+  </orderHeaderResponse>
+  <orderLinesResponse>
+    <productOrderLineResponse lineAccepted='true' roundUpForConditionDone='false' productReplaced='false' backLogLine='false'>
+      <productOrderLine orderQuantity=''>
+        <pharmaCode id='1336630'/>
+      </productOrderLine>
+      <productResponse description='Product1' wholesalerProductCode='1'/>
+      <availability status='yes'/>
+    </productOrderLineResponse>
+    <productOrderLineResponse lineAccepted='true' roundUpForConditionDone='false' productReplaced='false' backLogLine='false'>
+      <productOrderLine orderQuantity=''>
+        <EAN id='7680123456789'/>
+      </productOrderLine>
+      <productResponse description='Product2' wholesalerProductCode='2'/>
+      <availability status='yes'/>
+    </productOrderLineResponse>
+  </orderLinesResponse>
+</customerOrderResponse>
+        EOS
       end
     end
   end

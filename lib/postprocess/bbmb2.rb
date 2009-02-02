@@ -14,7 +14,7 @@ module XmlConv
         if(bdd = transaction.model)
           bbmb = DRbObject.new(nil, drb_url)
           messages = []
-          bdd.deliveries.each { |delivery|
+          bdd.deliveries.each_with_index { |delivery, idx|
             inject_id, order, info = nil
             begin
               customer = delivery.customer
@@ -30,10 +30,12 @@ module XmlConv
               inject_id ||= customer.party_id
               order = order(delivery)
               info = info(delivery)
-              bbmb.inject_order(inject_id, order, info, :deliver => true,
-                                :create_missing_customer => idtype,
-                                :transaction => transaction.transaction_id,
-                                :customer_name => name)
+              resp = bbmb.inject_order(inject_id, order, info, 
+                                       :deliver => true,
+                                       :create_missing_customer => idtype,
+                                       :transaction => transaction.transaction_id,
+                                       :customer_name => name)
+              transaction.respond(idx, resp)
             rescue Exception => e
               message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \

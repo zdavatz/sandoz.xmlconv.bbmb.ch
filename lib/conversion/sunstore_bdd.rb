@@ -29,6 +29,82 @@ class << self
   def parse(xml_src)
     REXML::Document.new(xml_src)
   end
+  def respond(model, responses)
+    doc = REXML::Document.new <<-EOS
+<?xml version="1.0" encoding="UTF-8"?>
+<customerOrderResponse xmlns="http://www.e-galexis.com/schemas/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd"
+  version="1.0" roundUpForCondition="false" backLogDesired="false"
+  language="de" productDescriptionDesired="false">
+</customerOrderResponse>
+    EOS
+    root = doc.root
+    model.deliveries.each_with_index do |delivery, idx|
+      if data = responses[idx]
+        root.add_element 'clientResponse', 'number' => _utf8(data[:order_id])
+        if data[:products].compact.size == delivery.items.size
+          header = root.add_element 'orderHeaderResponse',
+                                    'referenceNumber' => _utf8(delivery.customer_id)
+          if ship_to = delivery.customer.ship_to
+            attrs = { 'line1' => _utf8(ship_to.name) }
+            attrs2 = {}
+            if addr = ship_to.address
+              addr.lines.each_with_index do |line, idx|
+                line = _utf8 line
+                case idx
+                when 0
+                  attrs2.store 'line2', line
+                when 1
+                  attrs2.store 'line3', line
+                when 2
+                  attrs.store 'line4', line
+                end
+              end
+              attrs.store 'line5PostalCode', _utf8(addr.zip_code)
+              attrs.store 'line5City', _utf8(addr.city)
+            end
+            address = header.add_element 'deliveryAddress', attrs
+            unless attrs2.empty?
+              address.add_element 'addressLine2And3Text', attrs2
+            end
+          end
+          lines = root.add_element 'orderLinesResponse'
+          delivery.items.each_with_index do |item, idx|
+            presp = data[:products][idx]
+            available = presp[:quantity] == presp[:deliverable]
+            attrs = {
+              'lineAccepted' => _boolean(available),
+              'backLogLine'  => _boolean(presp[:backorder]),
+              'roundUpForConditionDone' => 'false',
+              'productReplaced' => 'false',
+            }
+            prod = lines.add_element 'productOrderLineResponse', attrs
+            pol = prod.add_element 'productOrderLine',
+                                   'orderQuantity' => presp[:quantity]
+            if pcode = item.pharmacode_id
+              pol.add_element 'pharmaCode', 'id' => pcode
+            end
+            if ean = item.et_nummer_id
+              pol.add_element 'EAN', 'id' => ean
+            end
+            attrs = {
+              'wholesalerProductCode' => presp[:article_number],
+              'description' => presp[:description],
+            }
+            presp = prod.add_element 'productResponse', attrs
+            prod.add_element 'availability',
+                             'status' => available ? 'yes' : 'no'
+          end
+        else
+          root.add_element 'orderHeaderErrorResponse'
+        end
+      else
+        root.add_element 'clientErrorResponse'
+      end
+    end
+    doc
+  end
   def _bdd_add_xml_delivery(bdd, xml_delivery)
     delivery = Model::Delivery.new
     bsr = Model::Bsr.new
@@ -44,6 +120,9 @@ class << self
     end
     bdd.add_delivery(delivery)
     delivery
+  end
+  def _boolean(item)
+    item ? 'true' : 'false'
   end
   def _bsr_add_customer_id(bsr, id)
     customer = Model::Party.new
@@ -120,6 +199,11 @@ class << self
   end
   def _latin1(str)
     Iconv.iconv('ISO-8859-1//TRANSLIT//IGNORE', 'UTF8', str).first.strip
+  rescue
+    str
+  end
+  def _utf8(str)
+    Iconv.iconv('UTF-8//TRANSLIT//IGNORE', 'ISO-8859-1', str).first.strip
   rescue
     str
   end
