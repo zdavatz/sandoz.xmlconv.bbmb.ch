@@ -44,7 +44,8 @@ begin
   transaction.postprocs.push(['Bbmb2', 'inject',
                               ENV['ACCESS_BBMB'], 'customer_id'])
 
-	xmlconv.dispatch(transaction)
+  request.content_type = 'text/xml'
+	puts xmlconv.execute_with_response(transaction)
 
 rescue StandardError => err
 	request.server.log_error(err.class.to_s)
