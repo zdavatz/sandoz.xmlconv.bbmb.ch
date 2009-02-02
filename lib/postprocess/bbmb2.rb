@@ -37,6 +37,7 @@ module XmlConv
                                        :customer_name => name)
               transaction.respond(idx, resp)
             rescue Exception => e
+              transaction.respond(idx, :products => order)
               message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \
                 << e.message << "\n\n" \

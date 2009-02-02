@@ -29,7 +29,7 @@ class << self
   def parse(xml_src)
     REXML::Document.new(xml_src)
   end
-  def respond(model, responses)
+  def respond(transaction, responses)
     doc = REXML::Document.new <<-EOS
 <?xml version="1.0" encoding="UTF-8"?>
 <customerOrderResponse xmlns="http://www.e-galexis.com/schemas/"
@@ -40,9 +40,14 @@ class << self
 </customerOrderResponse>
     EOS
     root = doc.root
-    model.deliveries.each_with_index do |delivery, idx|
+    transaction.model.deliveries.each_with_index do |delivery, idx|
       if data = responses[idx]
-        root.add_element 'clientResponse', 'number' => _utf8(data[:order_id])
+        number = if(order_id = data[:order_id])
+                   _utf8 order_id
+                 else
+                   "error-#{transaction.transaction_id}-#{idx}"
+                 end
+        root.add_element 'clientResponse', 'number' => number
         if data[:products].compact.size == delivery.items.size
           header = root.add_element 'orderHeaderResponse',
                                     'referenceNumber' => _utf8(delivery.customer_id)
