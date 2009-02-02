@@ -30,11 +30,13 @@ module XmlConv
               inject_id ||= customer.party_id
               order = order(delivery)
               info = info(delivery)
-              resp = bbmb.inject_order(inject_id, order, info, 
-                                       :deliver => true,
-                                       :create_missing_customer => idtype,
-                                       :transaction => transaction.transaction_id,
-                                       :customer_name => name)
+							options = {
+								:deliver => true,
+								:create_missing_customer => idtype.to_s,
+								:transaction => transaction.transaction_id.to_s,
+								:customer_name => name.to_s,
+							}
+							resp = bbmb.inject_order(inject_id, order, info, options)
               transaction.respond(idx, resp)
             rescue Exception => e
               transaction.respond(idx, :products => order)
