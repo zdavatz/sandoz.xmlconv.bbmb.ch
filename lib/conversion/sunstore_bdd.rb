@@ -47,12 +47,12 @@ class << self
                  else
                    "error-#{transaction.transaction_id}-#{idx}"
                  end
-        root.add_element 'clientResponse', 'number' => number
+        root.add_element('clientResponse').add_attribute('number', number)
         if data[:products].compact.size == delivery.items.size
-          header = root.add_element 'orderHeaderResponse',
-                                    'referenceNumber' => _utf8(delivery.customer_id)
+          header = root.add_element 'orderHeaderResponse'
+          header.add_attribute 'referenceNumber', _utf8(delivery.customer_id)
           if ship_to = delivery.customer.ship_to
-            attrs = { 'line1' => _utf8(ship_to.name) }
+            attrs = { 'line1' => _utf8(ship_to.name.text) }
             attrs2 = {}
             if addr = ship_to.address
               addr.lines.each_with_index do |line, idx|
@@ -69,9 +69,11 @@ class << self
               attrs.store 'line5PostalCode', _utf8(addr.zip_code)
               attrs.store 'line5City', _utf8(addr.city)
             end
-            address = header.add_element 'deliveryAddress', attrs
+            address = header.add_element 'deliveryAddress'
+            address.add_attributes attrs
             unless attrs2.empty?
-              address.add_element 'addressLine2And3Text', attrs2
+              line2 = address.add_element 'addressLine2And3Text'
+              line2.add_attributes attrs2
             end
           end
           lines = root.add_element 'orderLinesResponse'
@@ -84,20 +86,22 @@ class << self
               'roundUpForConditionDone' => 'false',
               'productReplaced' => 'false',
             }
-            prod = lines.add_element 'productOrderLineResponse', attrs
-            pol = prod.add_element 'productOrderLine',
-                                   'orderQuantity' => presp[:quantity]
+            prod = lines.add_element 'productOrderLineResponse'
+            prod.add_attributes attrs
+            pol = prod.add_element 'productOrderLine'
+            pol.add_attribute 'orderQuantity', item.qty
             if pcode = item.pharmacode_id
-              pol.add_element 'pharmaCode', 'id' => pcode
+              pol.add_element('pharmaCode').add_attribute('id', pcode)
             end
             if ean = item.et_nummer_id
-              pol.add_element 'EAN', 'id' => ean
+              pol.add_element('EAN').add_attribute('id', ean)
             end
             attrs = {
               'wholesalerProductCode' => presp[:article_number],
               'description' => presp[:description],
             }
-            presp = prod.add_element 'productResponse', attrs
+            presp = prod.add_element 'productResponse'
+            presp.add_attributes attrs
             prod.add_element 'availability',
                              'status' => available ? 'yes' : 'no'
           end

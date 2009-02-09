@@ -92,8 +92,8 @@ module XmlConv
       end
       def test_respond
         transaction = Util::Transaction.new
-        bdd = SunStoreBdd.convert(@xml_doc)
-        response = SunStoreBdd.respond bdd, []
+        transaction.instance_variable_set('@model', SunStoreBdd.convert(@xml_doc))
+        response = SunStoreBdd.respond transaction, []
         assert_instance_of REXML::Document, response
         output = ''
         REXML::Formatters::Pretty.new.write response, output
@@ -104,8 +104,8 @@ module XmlConv
 </customerOrderResponse>
         EOS
 
-        response = SunStoreBdd.respond bdd, [ :order_id => '12345-1', 
-                                              :products => [] ]
+        response = SunStoreBdd.respond transaction, [ :order_id => '12345-1',
+                                                      :products => [] ]
         output = ''
         REXML::Formatters::Pretty.new.write response, output
         assert_equal <<-EOS.strip, output
@@ -117,13 +117,13 @@ module XmlConv
         EOS
 
         products = [ 
-          { :description => 'Product1', 
+          { :description => 'Product & 1',
             :article_number => '1' },
-          { :description => 'Product2',
+          { :description => 'Product & 2',
             :article_number => '2' } 
         ]
-        response = SunStoreBdd.respond bdd, [ :order_id => '12345-1', 
-                                              :products => products ]
+        response = SunStoreBdd.respond transaction, [ :order_id => '12345-1',
+                                                      :products => products ]
         output = ''
         REXML::Formatters::Pretty.new.write response, output
         assert_equal <<-EOS.strip, output
@@ -137,17 +137,17 @@ module XmlConv
   </orderHeaderResponse>
   <orderLinesResponse>
     <productOrderLineResponse lineAccepted='true' roundUpForConditionDone='false' productReplaced='false' backLogLine='false'>
-      <productOrderLine orderQuantity=''>
+      <productOrderLine orderQuantity='10'>
         <pharmaCode id='1336630'/>
       </productOrderLine>
-      <productResponse description='Product1' wholesalerProductCode='1'/>
+      <productResponse description='Product &amp; 1' wholesalerProductCode='1'/>
       <availability status='yes'/>
     </productOrderLineResponse>
     <productOrderLineResponse lineAccepted='true' roundUpForConditionDone='false' productReplaced='false' backLogLine='false'>
-      <productOrderLine orderQuantity=''>
+      <productOrderLine orderQuantity='5'>
         <EAN id='7680123456789'/>
       </productOrderLine>
-      <productResponse description='Product2' wholesalerProductCode='2'/>
+      <productResponse description='Product &amp; 2' wholesalerProductCode='2'/>
       <availability status='yes'/>
     </productOrderLineResponse>
   </orderLinesResponse>
