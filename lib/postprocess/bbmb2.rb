@@ -25,7 +25,7 @@ module XmlConv
                 if addr = ship.address
                   name = addr.lines.first
                 end
-                inject_id ||= ship_to.acc_id
+                inject_id ||= ship.acc_id
               end
               inject_id ||= customer.party_id
               order = order(delivery)
