@@ -30,6 +30,7 @@ Hoe.spec 'sandozxmlconv' do
   # (delete this comment too, of course)
 
 developer('Masaomi Hatakeyama, Zeno R.R. Davatz', 'mhatakeyama@ywesee.com, zdavatz@ywesee.com')
+self.local_rdoc_dir = 'rdoc'
 
   # self.rubyforge_name = 'sandozxmlconvx' # if different than 'sandozxmlconv'
 end

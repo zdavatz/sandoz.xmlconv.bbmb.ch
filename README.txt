@@ -2,6 +2,10 @@
 
 * http://scm.ywesee.com/?p=globopharm.xmlconv.bbmb.ch/.git;a=summary
 
+A graphical overview can be found here:
+
+* http://sandozxmlconv.rubyforge.org/sandozxmlconv.jpeg
+
 == DESCRIPTION:
 
 * xml converter files for Sandoz Switzerland
