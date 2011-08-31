@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-# Conversion::PharmaciePlusBdd -- xmlconv2 -- 18.08.2006 -- hwyss@ywesee.com
+# XmlConv::Conversion::PharmaciePlusBdd -- xmlconv  -- 27.07.2011 -- mhatakeyama@ywesee.com
+# XmlConv::Conversion::PharmaciePlusBdd -- xmlconv2 -- 18.08.2006 -- hwyss@ywesee.com
 
 require 'rexml/document'
 require 'xmlconv/model/address'
@@ -84,6 +85,10 @@ class << self
         name.text = _latin1(xml_name.text)
       end
       customer.name = name
+
+      ean_code = xml_delivery.attributes['ean']
+      customer.add_id('ACC', ean_code) # This ean code is used for the output file name
+
       ship_to.name = name
       _party_add_xml_address(ship_to, xml_header)
     end
