@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# XmlConv::BddI2 -- globopharm.xmlconv.bbmb.ch  -- 30.08.2011 -- mhatakeyama@ywesee.com
+# XmlConv::BddI2 -- globopharm.xmlconv.bbmb.ch  -- 22.09.2011 -- mhatakeyama@ywesee.com
 # XmlConv::BddI2 -- xmlconv2 -- 02.06.2004 -- hwyss@ywesee.com
 
 require 'xmlconv/i2/document'
@@ -26,19 +26,24 @@ module XmlConv
           if((bsr = bdd.bsr) && (id = bsr.customer.acc_id))
             sender_id = id
           end
+          index = 0
           bdd.deliveries.collect { |delivery|
             doc = I2::Document.new
-            _doc_add_delivery(doc, delivery, sender_id)
+            _doc_add_delivery(doc, delivery, sender_id, index)
+            index += 1
             doc
           }
         end
-        def _doc_add_delivery(doc, delivery, sender_id='YWESEE')
+        def _doc_add_delivery(doc, delivery, sender_id='YWESEE', index=0)
           order = I2::Order.new
           order.sender_id = sender_id
           # customer_id is in reality the delivery_id assigned by the
           # customer - the slight confusion is due to automatic naming
           transaction_id = delivery.customer_id
+          #transaction_id = "%013d%02d" % [delivery.customer_id, index]
           order.ade_id = order.delivery_id = transaction_id
+          #order.ade_id = order.delivery_id = "%013d%02d" % [transaction_id, index]
+          order.ade_id = "%013d%02d" % [transaction_id, index]
           #doc.header.transaction_id = sprintf(transaction_id.to_s.rjust(8, '0'))
           order.add_date(I2::Date.from_date(::Date.today, :order, :order))
           if(bsr = delivery.bsr)
@@ -50,7 +55,13 @@ module XmlConv
           if(customer = delivery.customer)
             _order_add_customer(order, customer)
             #prefix = customer.name.to_s
-            prefix = 'KD' + customer.acc_id.to_s
+            
+            #prefix = 'KD' + customer.acc_id.to_s
+            #prefix = 'CO_' + customer.acc_id.to_s
+            #prefix = 'CO_' + "%013d" % transaction_id
+            #prefix = 'CO_' + "%013d%02d" % [transaction_id, index]
+            prefix = 'CO_' + order.ade_id
+
             #prefix.gsub!(/\s+/, '_')
             #prefix.gsub!(/[^a-z0-9_]/i, '')
             #if(prefix.empty?)
