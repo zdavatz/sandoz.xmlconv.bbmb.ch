@@ -2,7 +2,6 @@
 # PostProcess::Bbmb2 -- xmlconv2 -- 25.08.2006 -- hwyss@ywesee.com
 
 require 'drb'
-require 'iconv'
 
 module XmlConv
   module PostProcess
