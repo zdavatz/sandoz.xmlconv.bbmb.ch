@@ -30,9 +30,7 @@ class BddCsv
         result.prefix = customer_id ||= customer.ids['supplier']
       end
       result.prefix ||= customer_ean13
-      CSV::Writer.generate(result, 
-                           XmlConv::CONFIG.target_format_fs,
-                           XmlConv::CONFIG.target_format_rs) { |writer|
+      CSV.generate(result) { |writer|
         delivery.items.each { |item|
           if(nprice = item.get_price('NettoPreis'))
             price = nprice.amount

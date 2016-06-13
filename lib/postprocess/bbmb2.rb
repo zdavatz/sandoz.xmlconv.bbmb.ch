@@ -84,11 +84,11 @@ module XmlConv
       end
       def Bbmb2.info(delivery)
         info = {
-          :reference => iconv(delivery.customer_id),
+          :reference => delivery.customer_id.encode('UTF-8')
         }
         lines = []
         if(text = delivery.free_text)
-          info.store(:comment, iconv(text))
+          info.store(:comment, text.encode('UTF-8'))
         end
         info
       end

@@ -1,11 +1,7 @@
 #!/usr/bin/env ruby
 # propharma.rbx -- xmlconv2 -- 07.06.2004 -- hwyss@ywesee.com
 
-$: << File.expand_path('../lib', File.dirname(__FILE__))
-
 require 'drb/drb'
-require 'xmlconv/util/destination'
-require 'xmlconv/util/transaction'
 
 begin
 	request = Apache.request

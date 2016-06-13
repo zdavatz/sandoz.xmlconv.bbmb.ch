@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # Conversion::ProPharmaBdd -- xmlconv2 -- 14.09.2007 -- hwyss@ywesee.com
 
-require 'rockit/rockit'
 require 'xmlconv/model/bdd'
 require 'xmlconv/model/bsr'
 require 'xmlconv/model/delivery'
@@ -12,28 +11,6 @@ require 'xmlconv/model/party'
 module XmlConv
   module Conversion
     class ProPharmaBdd
-@parser = Parse.generate_parser <<-EOG
-Grammar ProPharma
-  Tokens
-    DATA = /[^\n]+/
-    NL = /\n/
-  Productions
-    Bdd         -> Customer Order
-    Customer    -> '[KUNDE]' NL CId CName Location
-    CId         -> 'idt=' DATA NL
-    CName       -> 'nam=' DATA NL
-    Location    -> 'ort=' DATA NL
-    Order       -> '[BSTELL]' NL Reference Date Time Item+
-                   [: _, _, reference, date, time, items ]
-    Reference   -> 'ref=' DATA NL
-    Date        -> 'dat=' DATA NL
-    Time        -> 'tim=' DATA NL
-    Item        -> '[ARTIK]' NL Type PCode Description Quantity
-    Type        -> 'typ=' DATA NL
-    PCode       -> 'phc=' DATA NL
-    Description -> 'art=' DATA NL
-    Quantity    -> 'mge=' DATA NL
-EOG
 class << self
   def convert(ast)
     bdd = Model::Bdd.new
@@ -42,7 +19,9 @@ class << self
     bdd
   end
   def parse(src)
-    @parser.parse(src) 
+    puts "Cannot yet parse src #{src}"
+    require 'pry'; binding.pry
+    ostruct = OpenStruct.new
   end
   def _bdd_add_delivery(bdd, ast)
     delivery = Model::Delivery.new
