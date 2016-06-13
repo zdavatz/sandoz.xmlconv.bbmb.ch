@@ -1,4 +1,4 @@
-= sandozxmlconv
+# sandozxmlconv
 
 * https://github.com/zdavatz/sandoz.xmlconv.bbmb.ch
 
@@ -6,15 +6,15 @@ A graphical overview can be found here:
 
 * https://github.com/zdavatz/sandoz.xmlconv.bbmb.ch/sandozxmlconv.jpeg
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 * xml converter files for Sandoz Switzerland
 
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 * xmlconv - sudo gem install xmlconv
 
-== INSTALL:
+## INSTALL:
 
 * git clone https://github.com/zdavatz/sandoz.xmlconv.bbmb.ch.git
 * create and adapt etc/polling.yml
@@ -23,13 +23,13 @@ A graphical overview can be found here:
 * integrate it with apache mod_ruby
 
 
-== DEVELOPERS:
+## DEVELOPERS:
 
 * Zeno R.R. Davatz
 * Masaomi Hatakeyama
 * Hannes Wyss (up to Version 1.0.0)
 * Niklaus Giger (ported to Ruby 2.3)
 
-== LICENSE:
+## LICENSE:
 
 * GPLv2
