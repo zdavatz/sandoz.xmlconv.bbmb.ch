@@ -4,15 +4,15 @@
 $: << File.expand_path('..', File.dirname(__FILE__))
 $: << File.expand_path('../../lib', File.dirname(__FILE__))
 
-require 'test/unit'
 require 'xmlconv/util/transaction'
 require 'xmlconv/util/destination'
 require 'conversion/propharma_bdd'
 require 'conversion/bdd_csv'
+require 'minitest/autorun'
 
 module XmlConv
   module Integration
-class TestProPharmaI2 < Test::Unit::TestCase
+class TestProPharmaI2 < ::Minitest::Test
   def setup
     @target_dir = File.expand_path('data/propharma_csv',
       File.dirname(__FILE__))

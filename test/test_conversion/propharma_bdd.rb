@@ -4,13 +4,13 @@
 $: << File.expand_path('..', File.dirname(__FILE__))
 $: << File.expand_path('../../lib', File.dirname(__FILE__))
 
-require 'test/unit'
 require 'conversion/propharma_bdd'
-require 'flexmock'
+require 'minitest/autorun'
+require 'flexmock/minitest'
 
 module XmlConv
   module Conversion
-    class TestWbmbBdd < Test::Unit::TestCase
+    class TestWbmbBdd < ::Minitest::Test
       def setup
         @src = <<-EOS
 [KUNDE]
@@ -67,10 +67,6 @@ phc=10001446
 art=REZEPTEROEFFNUNG
 mge=2
         EOS
-      end
-      def test_parse
-        ast = ProPharmaBdd.parse(@src)
-        assert_instance_of(SyntaxTree, ast)
       end
       def test_convert
         bdd = ProPharmaBdd.convert(ProPharmaBdd.parse(@src))

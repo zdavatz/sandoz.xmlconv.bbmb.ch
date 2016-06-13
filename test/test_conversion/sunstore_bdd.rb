@@ -4,13 +4,13 @@
 $: << File.dirname(__FILE__)
 $: << File.expand_path('../../lib', File.dirname(__FILE__))
 
-require 'test/unit'
 require 'conversion/sunstore_bdd'
 require 'xmlconv/util/transaction'
+require 'minitest/autorun'
 
 module XmlConv
   module Conversion
-    class TestGehBdd < Test::Unit::TestCase
+    class TestGehBdd < ::Minitest::Test
       def setup
         @src = <<-XML
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -73,7 +73,7 @@ module XmlConv
                        "Linkestrasse 99" ],
                      address.lines)
         assert_equal("3322", address.zip_code)
-        assert_equal("Sch\366nb\374hl", address.city)
+        assert_equal("Schönbühl", address.city)
         assert_equal(2, delivery.items.size)
 
         item = delivery.items.first

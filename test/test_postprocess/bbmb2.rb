@@ -3,16 +3,16 @@
 
 $: << File.expand_path('../../lib', File.dirname(__FILE__))
 
-require 'test/unit'
 require 'postprocess/bbmb2'
-require 'flexmock'
 require 'conversion/pharmacieplus_bdd'
 require 'conversion/propharma_bdd'
 require 'conversion/wbmb_bdd'
+require 'minitest/autorun'
+require 'flexmock/minitest'
 
 module XmlConv
   module PostProcess
-    class TestBbmb2 < Test::Unit::TestCase
+    class TestBbmb2 < ::Minitest::Test
       def test_inject
         src = <<-XML
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -104,7 +104,7 @@ module XmlConv
     <livraison>
     <last-name>Pharmacie du Mandement</last-name>
       <first-name> </first-name>
-      <other-name> Monsieur Frédéric Recipient </other-name>
+      <other-name> Monsieur FrÃ©dÃ©ric Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1242</zip>
@@ -135,13 +135,13 @@ module XmlConv
   </com-pharma>
   <com-pharma ean="7601001368491">
     <livraison>
-      <last-name>Pharm. Ecole-de-Médecine</last-name>
+      <last-name>Pharm. Ecole-de-MÃ©decine</last-name>
       <first-name> </first-name>
-      <other-name> Madame Françoise Recipient </other-name>
+      <other-name> Madame FranÃ§oise Recipient </other-name>
       <address>
         <street>3e adresse e-mail</street>
         <zip>1205</zip>
-        <city>Genève</city>
+        <city>GenÃ¨ve</city>
       </address>
     </livraison>
     <article ean="7680543802083" pharmacode="2054106" qte-livraison="12" qte-facture="10">
@@ -219,7 +219,7 @@ module XmlConv
       <wbmb:absender xsi:type="enc:Array" enc:arrayType="wbmb:identifier[3]">
         <wbmb:identifier>
           <wbmb:idtype>name</wbmb:idtype>
-          <wbmb:idvalue>ywesee Testspitäler</wbmb:idvalue>
+          <wbmb:idvalue>ywesee TestspitÃ¤ler</wbmb:idvalue>
         </wbmb:identifier>
         <wbmb:identifier>
           <wbmb:idtype>kundennummer</wbmb:idtype>
