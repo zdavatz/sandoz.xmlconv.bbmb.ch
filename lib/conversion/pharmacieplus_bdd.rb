@@ -116,7 +116,7 @@ class << self
     delivery.add_item(item)
   end
   def _latin1(str)
-    Iconv.iconv('ISO-8859-1//TRANSLIT//IGNORE', 'UTF8', str).first.strip
+    str.encode('UTF-8')
   rescue
     str
   end

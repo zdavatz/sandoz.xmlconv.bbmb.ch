@@ -92,10 +92,6 @@ module XmlConv
         end
         info
       end
-      def Bbmb2.iconv(str)
-        @iconv ||= Iconv.new('utf8', 'latin1')
-        @iconv.iconv str
-      end
     end
   end
 end

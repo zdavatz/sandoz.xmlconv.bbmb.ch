@@ -207,12 +207,12 @@ class << self
     end
   end
   def _latin1(str)
-    Iconv.iconv('ISO-8859-1//TRANSLIT//IGNORE', 'UTF8', str).first.strip
+    str.encode('UTF-8')
   rescue
     str
   end
   def _utf8(str)
-    Iconv.iconv('UTF-8//TRANSLIT//IGNORE', 'ISO-8859-1', str).first.strip
+    str.encode('ISO-8859-1')
   rescue
     str
   end
