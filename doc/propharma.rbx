@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# propharma.rbx -- xmlconv2 -- 07.06.2004 -- hwyss@ywesee.com
 
 require 'drb/drb'
 
@@ -41,7 +40,7 @@ begin
                               ENV['ACCESS_BBMB'], 'customer_id'])
 
   request.content_type = 'text/xml'
-	puts xmlconv.execute_with_response(transaction)
+  puts xmlconv.execute_with_response(transaction)
 
 rescue StandardError => err
 	request.server.log_error(err.class.to_s)

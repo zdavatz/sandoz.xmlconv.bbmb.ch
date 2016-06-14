@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# index.rbx -- xmlconv2 -- hwyss@ywesee.com
 
 require 'sbsm/request'
 
