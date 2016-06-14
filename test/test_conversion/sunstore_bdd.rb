@@ -99,7 +99,7 @@ module XmlConv
         REXML::Formatters::Pretty.new.write response, output
         assert_equal <<-EOS.strip, output
 <?xml version='1.0' encoding='UTF-8'?>
-<customerOrderResponse backLogDesired='false' language='de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' productDescriptionDesired='false' roundUpForCondition='false' xmlns='http://www.e-galexis.com/schemas/'>
+<customerOrderResponse xmlns='http://www.e-galexis.com/schemas/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' roundUpForCondition='false' backLogDesired='false' language='de' productDescriptionDesired='false'>
   <clientErrorResponse/>
 </customerOrderResponse>
         EOS
@@ -110,7 +110,7 @@ module XmlConv
         REXML::Formatters::Pretty.new.write response, output
         assert_equal <<-EOS.strip, output
 <?xml version='1.0' encoding='UTF-8'?>
-<customerOrderResponse backLogDesired='false' language='de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' productDescriptionDesired='false' roundUpForCondition='false' xmlns='http://www.e-galexis.com/schemas/'>
+<customerOrderResponse xmlns='http://www.e-galexis.com/schemas/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' roundUpForCondition='false' backLogDesired='false' language='de' productDescriptionDesired='false'>
   <clientResponse number='12345-1'/>
   <orderHeaderErrorResponse/>
 </customerOrderResponse>
@@ -128,26 +128,26 @@ module XmlConv
         REXML::Formatters::Pretty.new.write response, output
         assert_equal <<-EOS.strip, output
 <?xml version='1.0' encoding='UTF-8'?>
-<customerOrderResponse backLogDesired='false' language='de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' productDescriptionDesired='false' roundUpForCondition='false' xmlns='http://www.e-galexis.com/schemas/'>
+<customerOrderResponse xmlns='http://www.e-galexis.com/schemas/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' roundUpForCondition='false' backLogDesired='false' language='de' productDescriptionDesired='false'>
   <clientResponse number='12345-1'/>
   <orderHeaderResponse referenceNumber='123ABCDE9012345'>
-    <deliveryAddress line1='Superkunde' line5City='Schönbühl' line5PostalCode='3322' line4='Linkestrasse 99'>
+    <deliveryAddress line1='Superkunde' line4='Linkestrasse 99' line5PostalCode='3322' line5City='Schönbühl'>
       <addressLine2And3Text line2='Dorfladen' line3='Frau Muster'/>
     </deliveryAddress>
   </orderHeaderResponse>
   <orderLinesResponse>
-    <productOrderLineResponse lineAccepted='true' roundUpForConditionDone='false' productReplaced='false' backLogLine='false'>
+    <productOrderLineResponse lineAccepted='true' backLogLine='false' roundUpForConditionDone='false' productReplaced='false'>
       <productOrderLine orderQuantity='10'>
         <pharmaCode id='1336630'/>
       </productOrderLine>
-      <productResponse description='Product &amp; 1' wholesalerProductCode='1'/>
+      <productResponse wholesalerProductCode='1' description='Product &amp; 1'/>
       <availability status='yes'/>
     </productOrderLineResponse>
-    <productOrderLineResponse lineAccepted='true' roundUpForConditionDone='false' productReplaced='false' backLogLine='false'>
+    <productOrderLineResponse lineAccepted='true' backLogLine='false' roundUpForConditionDone='false' productReplaced='false'>
       <productOrderLine orderQuantity='5'>
         <EAN id='7680123456789'/>
       </productOrderLine>
-      <productResponse description='Product &amp; 2' wholesalerProductCode='2'/>
+      <productResponse wholesalerProductCode='2' description='Product &amp; 2'/>
       <availability status='yes'/>
     </productOrderLineResponse>
   </orderLinesResponse>
