@@ -40,10 +40,12 @@ describe "bbmb.xmlconv" do
     end
 
     tests = [ XmlConvTest.new('propharma', 4100612722, 'Bilol 2.5 mg Filmtbl 100', 310.62, 30.3),
+              # transaction id 28604
+              XmlConvTest.new('volksapotheke', 4100614181, 'Bilol 2.5 mg Filmtbl 100', 494.86, 10.1),
               ]
     tests.each do |xml_conv_test|
       puts xml_conv_test
-      it "handle injection via xml_conv_test.name" do
+      it "handle injection via #{xml_conv_test.name}" do
         total_before, item_before = get_total_and_item_total(xml_conv_test.customer_id, xml_conv_test.product_name)
         puts "Before #{total_before} item  #{item_before}"
         inject_invoice(xml_conv_test.name)
@@ -55,7 +57,7 @@ describe "bbmb.xmlconv" do
         diff_item= item_after - item_before
         puts "diff_item #{diff_item} diff_total  #{diff_total}"
         expect(diff_total).to be_within(0.01).of(xml_conv_test.diff_total)
-        # expect(diff_item).to be_within(0.01).of(xml_conv_test.diff_item)
+        expect(diff_item).to be_within(0.01).of(xml_conv_test.diff_item)
       end
     end
   end
