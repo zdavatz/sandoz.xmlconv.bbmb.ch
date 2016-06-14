@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<customerOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     version="1.0"
+     xsi:schemaLocation="http://www.e-galexis.com/schemas/
+     http://www.e-galexis.com/schemas/POS/customerOrder/customerOrder.xsd"
+     language="de" roundUpForCondition="false"
+     backLogDesired="false" productDescriptionDesired="true"
+     communicationSoftwareId="ERGO"
+     xmlns="http://www.e-galexis.com/schemas/">
+  <client number="4100612722" password="7601001395954" />
+  <orderHeader referenceNumber="16114" />
+  <orderLines>
+    <productOrderLine orderQuantity="1">
+      <pharmaCode id="2991130" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="2">
+      <pharmaCode id="4430714" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="5">
+      <pharmaCode id="3663623" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="7">
+      <pharmaCode id="2323983" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="3">
+      <pharmaCode id="4124733" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="3">
+      <pharmaCode id="2347937" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="2">
+      <pharmaCode id="1390061" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="4">
+      <pharmaCode id="2366053" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="2">
+      <pharmaCode id="2092466" />
+    </productOrderLine>
+  </orderLines>
+</customerOrder>
