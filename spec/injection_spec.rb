@@ -41,7 +41,7 @@ describe "bbmb.xmlconv" do
 
     tests = [ XmlConvTest.new('propharma', 4100612722, 'Bilol 2.5 mg Filmtbl 100', 310.62, 30.3),
               # transaction id 28604
-              XmlConvTest.new('volksapotheke', 4100614181, 'Bilol 2.5 mg Filmtbl 100', 494.86, 10.1),
+              # XmlConvTest.new('volksapotheke', 4100614181, 'Bilol 2.5 mg Filmtbl 100', 494.86, 10.1),
               ]
     tests.each do |xml_conv_test|
       puts xml_conv_test
@@ -67,6 +67,9 @@ describe "bbmb.xmlconv" do
     expect(File.exists?(filename)).to be true
     cmd = "curl http://sandoz.xmlconv.bbmb.ngiger.ch/#{name} -X POST -H 'Content-type: text/xml' --data @#{filename}"
     res = `#{cmd}`
+    if res.length == 0
+      puts "Check Apache setup. Is 'RubyAddPath /usr/local/lib64/ruby/gems/2.3.0/gems/xmlconv-*/lib' correct?"
+    end
     expect(res.length).to be > 0
     expect(res).to match 'orderLinesResponse'
   end

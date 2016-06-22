@@ -22,6 +22,9 @@ A graphical overview can be found here:
 * mkdir -p log var/output
 * integrate it with apache mod_ruby
 
+## Testing
+
+There is one spec test (using watir) to check the injection. To run it call `rspec spec/injection_spec.rb`
 
 ## DEVELOPERS:
 
