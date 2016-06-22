@@ -24,7 +24,7 @@ module XmlConv
               info = info(delivery)
               bbmb.inject_order(name_short, iid, order, info)
             rescue Exception => e
-              message = "Bestellung OK, Eintrag in BBMB Fehlgeschlagen:\n" \
+              message = "Bestellung OK, Eintrag in BBMB fehlgeschlagen:\n" \
                 << e.class.to_s << "\n" \
                 << e.message << "\n\n" \
                 << e.backtrace.join("\n") << "\n\n" \

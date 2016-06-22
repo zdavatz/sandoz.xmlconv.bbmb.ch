@@ -17,6 +17,7 @@ class BddCsv
     def _formatted_comment(str, replacement=' ')
       str = str.to_s
       u(str.gsub(/[\r\n]+/, replacement))[0,60] unless(str.empty?)
+      str
     end
     def _to_csv(delivery)
       result = Model::Document.new

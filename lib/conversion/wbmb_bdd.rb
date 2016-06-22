@@ -189,7 +189,7 @@ class << self
   end
   def _latin1(txt)
     if(txt.is_a?(String))
-      Iconv.iconv('latin1', 'utf8', txt).first
+      txt.encode('UTF-8')
     end
   rescue
     txt
