@@ -8,6 +8,24 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = [:should, :expect]
   end
+
+  config.before(:all) do
+    begin
+      require 'headless'
+      @headless = Headless.new
+      @headless.start
+      at_exit do
+        @headless.destroy
+      end
+    rescue LoadError
+    end
+  end
+
+  config.after(:all) do
+    if @headless
+      @headless.destroy
+    end
+  end
 end
 
 BreakIntoPry = false
@@ -22,17 +40,19 @@ require 'fileutils'
 require 'watir-webdriver'
 require 'pp'
 
-AdminPassword     = ENV['SANDOZ_ADMIN_PASSWD']
-AdminUser         = 'admin@sandoz.ch'
-XmlConvUrl        = 'http://sandoz.xmlconv.bbmb.ngiger.ch/'
-BbmbUrl           = 'http://sandoz.bbmb.ngiger.ch/'
+AdminPassword = ENV['SANDOZ_ADMIN_PASSWD']
+AdminUser     = 'admin@sandoz.ch'
+XmlConvUrl    = ENV['SANDOZ_XMLCONV_URL'] || 'http://sandoz.xmlconv.bbmb.ngiger.ch/'
+BbmbUrl       = ENV['SANDOZ_BBMB_CH_URL'] || 'http://sandoz.bbmb.ngiger.ch/'
 
 Flavor    = 'sbsm'
-ImageDest = File.join(Dir.pwd, 'images')
+ImageDest = File.expand_path('../images', __FILE__)
 Browser2test = [ :chrome ]
 DownloadDir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'downloads'))
 GlobAllDownloads  = File.join(DownloadDir, '*')
 LeeresResult      =  /hat ein leeres Resultat/
+
+SkipScreenShot = ENV['SKIP_SCREENSHOT'] || false
 
 def setup_browser
   return if @browser
@@ -122,6 +142,7 @@ def small_delay
 end
 
 def createScreenshot(browser, added=nil)
+  FileUtils.mkdir(ImageDest) unless Dir.exists?(ImageDest)
   small_delay
   if browser.url.index('?')
     name = File.join(ImageDest, File.basename(browser.url.split('?')[0]).gsub(/\W/, '_'))
