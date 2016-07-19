@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'odba'
-gem 'tmail'
 gem 'xmlconv'
-gem 'minitest'
-gem 'flexmock'
+gem 'odba'
+gem 'soap4r'
+
 group :debugger do
   if RUBY_VERSION.match(/^1/)
     gem 'pry-debugger'
@@ -15,9 +14,16 @@ group :debugger do
 end
 
 group :test do
+  gem 'minitest'
+  gem 'flexmock'
+
   gem 'rspec'
   gem 'watir'
   gem 'watir-webdriver'
+end
+
+group :development do
+  gem 'yus'
 end
 
 # NOTE: additional personal Gemfile.hack support for developer
