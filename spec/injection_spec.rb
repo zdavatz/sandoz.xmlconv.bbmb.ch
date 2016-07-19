@@ -19,7 +19,7 @@ describe "bbmb.xmlconv" do
 
   after :each do
     @idx += 1
-    createScreenshot(@browser, '_'+@idx.to_s)
+    createScreenshot(@browser, '_'+@idx.to_s) unless SkipScreenShot
     logout
   end
 
@@ -44,7 +44,6 @@ describe "bbmb.xmlconv" do
               # XmlConvTest.new('volksapotheke', 4100614181, 'Bilol 2.5 mg Filmtbl 100', 494.86, 10.1),
               ]
     tests.each do |xml_conv_test|
-      puts xml_conv_test
       it "handle injection via #{xml_conv_test.name}" do
         total_before, item_before = get_total_and_item_total(xml_conv_test.customer_id, xml_conv_test.product_name)
         puts "Before #{total_before} item  #{item_before}"
@@ -52,10 +51,10 @@ describe "bbmb.xmlconv" do
         logout
         login(AdminUser, AdminPassword)
         total_after, item_after = get_total_and_item_total(xml_conv_test.customer_id, xml_conv_test.product_name)
-        puts "After #{total_after} item  #{item_after}"
+        puts "After  #{total_after} item  #{item_after}"
         diff_total = total_after - total_before
         diff_item= item_after - item_before
-        puts "diff_item #{diff_item} diff_total  #{diff_total}"
+        puts "Diff   #{diff_item} item   #{diff_total} total"
         expect(diff_total).to be_within(0.01).of(xml_conv_test.diff_total)
         expect(diff_item).to be_within(0.01).of(xml_conv_test.diff_item)
       end
@@ -65,7 +64,7 @@ describe "bbmb.xmlconv" do
   def inject_invoice(name)
     filename = File.join(Here, 'data', "#{name}.xml")
     expect(File.exists?(filename)).to be true
-    cmd = "curl #{XmlConvUrl}/#{name} -X POST -H 'Content-type: text/xml' --data @#{filename}"
+    cmd = "curl -s #{XmlConvUrl}/#{name} -X POST -H 'Content-type: text/xml' --data @#{filename}"
     res = `#{cmd}`
     if res.length == 0
       puts "Check Apache setup. Is 'RubyAddPath /usr/local/lib64/ruby/gems/2.3.0/gems/xmlconv-*/lib' correct?"

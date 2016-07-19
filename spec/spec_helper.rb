@@ -46,11 +46,13 @@ XmlConvUrl    = ENV['SANDOZ_XMLCONV_URL'] || 'http://sandoz.xmlconv.bbmb.ngiger.
 BbmbUrl       = ENV['SANDOZ_BBMB_CH_URL'] || 'http://sandoz.bbmb.ngiger.ch/'
 
 Flavor    = 'sbsm'
-ImageDest = File.join(Dir.pwd, 'images')
+ImageDest = File.expand_path('../images', __FILE__)
 Browser2test = [ :chrome ]
 DownloadDir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'downloads'))
 GlobAllDownloads  = File.join(DownloadDir, '*')
 LeeresResult      =  /hat ein leeres Resultat/
+
+SkipScreenShot = ENV['SKIP_SCREENSHOT'] || false
 
 def setup_browser
   return if @browser
@@ -140,7 +142,7 @@ def small_delay
 end
 
 def createScreenshot(browser, added=nil)
-  FileUtils.mkdir_p(File.expand_path('../images', __FILE__))
+  FileUtils.mkdir(ImageDest) unless Dir.exists?(ImageDest)
   small_delay
   if browser.url.index('?')
     name = File.join(ImageDest, File.basename(browser.url.split('?')[0]).gsub(/\W/, '_'))
