@@ -1,0 +1,14 @@
+.env
+.ruby-version
+Gemfile.hack
+
+/.bundle
+/env
+
+/log/*
+!/log/.gitignore
+/var/output/*
+!/var/output/.gitignore
+
+/spec/images/*
+!/spec/images/.gitignore
