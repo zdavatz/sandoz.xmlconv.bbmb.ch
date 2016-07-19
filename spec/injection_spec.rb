@@ -65,7 +65,7 @@ describe "bbmb.xmlconv" do
   def inject_invoice(name)
     filename = File.join(Here, 'data', "#{name}.xml")
     expect(File.exists?(filename)).to be true
-    cmd = "curl http://sandoz.xmlconv.bbmb.ngiger.ch/#{name} -X POST -H 'Content-type: text/xml' --data @#{filename}"
+    cmd = "curl #{XmlConvUrl}/#{name} -X POST -H 'Content-type: text/xml' --data @#{filename}"
     res = `#{cmd}`
     if res.length == 0
       puts "Check Apache setup. Is 'RubyAddPath /usr/local/lib64/ruby/gems/2.3.0/gems/xmlconv-*/lib' correct?"
