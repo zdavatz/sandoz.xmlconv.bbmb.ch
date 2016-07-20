@@ -81,10 +81,10 @@ class << self
             presp = data[:products][idx]
             available = presp[:quantity] == presp[:deliverable]
             attrs = {
-              'lineAccepted' => _boolean(available),
-              'backLogLine'  => _boolean(presp[:backorder]),
+              'lineAccepted'            => _boolean(available),
+              'backLogLine'             => _boolean(presp[:backorder]),
               'roundUpForConditionDone' => 'false',
-              'productReplaced' => 'false',
+              'productReplaced'         => 'false',
             }
             prod = lines.add_element 'productOrderLineResponse'
             prod.add_attributes attrs
@@ -151,7 +151,7 @@ class << self
     customer.role = 'Customer'
     _customer_add_party(customer, '1075', 'BillTo')
     xml_client = REXML::XPath.first(xml_delivery, 'client')
-    id = _latin1(xml_client.attributes['number'])
+    id = _utf8(xml_client.attributes['number'])
     customer.add_id('ACC', id)
     ship_to = _customer_add_party(customer, id, 'ShipTo')
     if(xml_header = REXML::XPath.first(xml_delivery, 'orderHeader'))
@@ -160,59 +160,54 @@ class << self
       # contains the customer's name. We're just guessing it might be in the first
       # line.
       if(xml_name = REXML::XPath.first(xml_header, 'deliveryAddress'))
-        name.text = _latin1(xml_name.attributes['line1'])
+        name.text = _utf8(xml_name.attributes['line1'])
       end
       customer.name = name
       ship_to.name = name
       _party_add_xml_address(ship_to, xml_header)
     end
     if(xml_email = REXML::XPath.first(xml_delivery, '//groupe/online/email'))
-      customer.add_id('email', _latin1(xml_email.text))
+      customer.add_id('email', _utf8(xml_email.text))
     end
     delivery.add_party(customer)
   end
   def _delivery_add_xml_header(delivery, xml_delivery)
     xml_order = REXML::XPath.first(xml_delivery, 'orderHeader')
-    delivery.add_id('Customer', _latin1(xml_order.attributes['referenceNumber']))
+    delivery.add_id('Customer', _utf8(xml_order.attributes['referenceNumber']))
     _delivery_add_xml_customer(delivery, xml_delivery)
   end
   def _delivery_add_xml_item(delivery, xml_item)
     item = Model::DeliveryItem.new
-    item.line_no = _latin1(delivery.items.size.next.to_s)
+    item.line_no = _utf8(delivery.items.size.next.to_s)
     if(xml_pcode = REXML::XPath.first(xml_item, 'EAN'))
-      item.add_id('ET-Nummer', _latin1(xml_pcode.attributes['id']))
+      item.add_id('ET-Nummer', _utf8(xml_pcode.attributes['id']))
     end
     if(xml_pcode = REXML::XPath.first(xml_item, 'pharmaCode'))
-      item.add_id('Pharmacode', _latin1(xml_pcode.attributes['id']))
+      item.add_id('Pharmacode', _utf8(xml_pcode.attributes['id']))
     end
     xml_qty = xml_item.attributes['orderQuantity'] \
       || xml_item.attributes['defaultOrderQuantity']
-    item.qty = _latin1(xml_qty)
+    item.qty = _utf8(xml_qty)
     item.unit = 'PCE'
     delivery.add_item(item)
   end
   def _party_add_xml_address(party, xml_header)
     if(xml_address = REXML::XPath.first(xml_header, 'deliveryAddress'))
       address = Model::Address.new
-      address.zip_code = _latin1(xml_address.attributes['line5PostalCode'])
-      address.city = _latin1(xml_address.attributes['line5City'])
+      address.zip_code = _utf8(xml_address.attributes['line5PostalCode'])
+      address.city     = _utf8(xml_address.attributes['line5City'])
       if(xml_lines = REXML::XPath.first(xml_address, 'addressLine2And3Text'))
-        address.add_line(_latin1(xml_lines.attributes['line2']))
-        address.add_line(_latin1(xml_lines.attributes['line3']))
+        address.add_line(_utf8(xml_lines.attributes['line2']))
+        address.add_line(_utf8(xml_lines.attributes['line3']))
       end
       if(line = xml_address.attributes['line4'])
-        address.add_line(_latin1(line))
+        address.add_line(_utf8(line))
       end
       party.address = address
     end
   end
-  def _latin1(str)
-    str.encode('UTF-8')
-  rescue
-    str
-  end
   def _utf8(str)
-    str.encode('ISO-8859-1')
+    str.encode('ISO-8859-1').force_encoding('UTF-8')
   rescue
     str
   end
