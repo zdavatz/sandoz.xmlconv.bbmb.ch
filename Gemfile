@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'xmlconv'
+gem 'sbsm'
 gem 'odba'
 gem 'soap4r'
 
@@ -13,9 +14,13 @@ group :debugger do
   end
 end
 
+group :test, :development do
+  gem 'rake'
+end
+
 group :test do
-  gem 'minitest'
-  gem 'flexmock'
+  gem 'minitest', '~> 5.9'
+  gem 'flexmock', '~> 2.2'
 
   gem 'rspec'
   gem 'watir'

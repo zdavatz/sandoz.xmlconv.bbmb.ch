@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<customerOrder xmlns="http://www.e-galexis.com/schemas/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrder.xsd"
+  backLogDesired="true" compressionDesired="false" language="de"
+  productDescriptionDesired="false" roundUpForCondition="true"
+  version="1.0">
+  <client number="test" password="test" />
+  <orderHeader deliveryDate="2002-08-25"
+    referenceNumber="123ABCDE9012345" mannerOfTransport="tour"
+    urgent="false">
+    <deliveryAddress line1="Superkunde" line4="Linkestrasse 99"
+      line5PostalCode="3322" line5City="Sch&#246;nb&#252;hl">
+      <addressLine2And3Text line2="Dorfladen" line3="Frau Muster" />
+    </deliveryAddress>
+  </orderHeader>
+  <orderLines>
+    <productOrderLine orderQuantity="10" roundUpForCondition="true"
+      backLogDesired="false">
+      <pharmaCode id="1336630" />
+    </productOrderLine>
+    <productLabelOrderLine defaultOrderQuantity="5">
+      <EAN id="7680123456789" />
+      <supplierProductNumber EANsupplierId="54321678091432"
+        id="123.234-2" />
+    </productLabelOrderLine>
+  </orderLines>
+</customerOrder>
