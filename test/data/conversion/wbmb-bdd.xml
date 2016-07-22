@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Body>
+  <wbmb:auftrag xmlns:wbmb="http://ywesee.com/wbmb" xmlns:enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema">
+    <wbmb:absender xsi:type="enc:Array" enc:arrayType="wbmb:identifier[3]">
+      <wbmb:identifier>
+        <wbmb:idtype>name</wbmb:idtype>
+        <wbmb:idvalue>ywesee Testspitäler</wbmb:idvalue>
+      </wbmb:identifier>
+      <wbmb:identifier>
+        <wbmb:idtype>kundennummer</wbmb:idtype>
+        <wbmb:idvalue>99</wbmb:idvalue>
+      </wbmb:identifier>
+      <wbmb:identifier>
+        <wbmb:idtype>auftragsnummer</wbmb:idtype>
+        <wbmb:idvalue>10019</wbmb:idvalue>
+      </wbmb:identifier>
+    </wbmb:absender>
+    <wbmb:empfaenger xsi:type="enc:Array" enc:arrayType="wbmb:identifier[2]">
+      <wbmb:identifier>
+        <wbmb:idtype>ean13</wbmb:idtype>
+        <wbmb:idvalue>7601001000681</wbmb:idvalue>
+      </wbmb:identifier>
+      <wbmb:identifier>
+        <wbmb:idtype>auftragsnummer</wbmb:idtype>
+        <wbmb:idvalue>76</wbmb:idvalue>
+      </wbmb:identifier>
+    </wbmb:empfaenger>
+    <wbmb:artikelliste xsi:type="enc:Array" enc:arrayType="wbmb:artikel[1]">
+      <wbmb:artikel>
+        <wbmb:position>1</wbmb:position>
+        <wbmb:identifier>
+          <wbmb:idtype>gag-code</wbmb:idtype>
+          <wbmb:idvalue>300976</wbmb:idvalue>
+        </wbmb:identifier>
+        <wbmb:identifier>
+          <wbmb:idtype>ean13</wbmb:idtype>
+          <wbmb:idvalue>1234567890123</wbmb:idvalue>
+        </wbmb:identifier>
+        <wbmb:identifier>
+          <wbmb:idtype>pharmacode</wbmb:idtype>
+          <wbmb:idvalue>1234567</wbmb:idvalue>
+        </wbmb:identifier>
+        <wbmb:bestellmenge>12</wbmb:bestellmenge>
+        <wbmb:artikelpreis>6.20</wbmb:artikelpreis>
+      </wbmb:artikel>
+    </wbmb:artikelliste>
+    <wbmb:auftrag_info xsi:type="enc:Array" enc:arrayType="wbmb:info[5]">
+      <wbmb:info>
+        <wbmb:infotype>text</wbmb:infotype>
+        <wbmb:infovalue>Diese Bestellung ist dringend!</wbmb:infovalue>
+      </wbmb:info>
+      <wbmb:info>
+        <wbmb:infotype>lieferung_bis</wbmb:infotype>
+        <wbmb:infovalue>2003-03-01 08:30:00</wbmb:infovalue>
+      </wbmb:info>
+      <wbmb:info>
+        <wbmb:infotype>lieferadresse</wbmb:infotype>
+        <wbmb:address xsi:type="enc:Array" enc:arrayType="wbmb:info[7]">
+          <wbmb:info>
+            <wbmb:infotype>name</wbmb:infotype>
+            <wbmb:infovalue>ywesee</wbmb:infovalue>
+          </wbmb:info>
+          <wbmb:info>
+            <wbmb:infotype>name</wbmb:infotype>
+            <wbmb:infovalue>intellectual capital connected</wbmb:infovalue>
+          </wbmb:info>
+          <wbmb:info>
+            <wbmb:infotype>strasse</wbmb:infotype>
+            <wbmb:infovalue>Postfach 1234</wbmb:infovalue>
+          </wbmb:info>
+          <wbmb:info>
+            <wbmb:infotype>strasse</wbmb:infotype>
+            <wbmb:infovalue>Winterthurerstrasse 52</wbmb:infovalue>
+          </wbmb:info>
+          <wbmb:info>
+            <wbmb:infotype>plz</wbmb:infotype>
+            <wbmb:infovalue>8006</wbmb:infovalue>
+          </wbmb:info>
+          <wbmb:info>
+            <wbmb:infotype>ort</wbmb:infotype>
+            <wbmb:infovalue>Zuerich</wbmb:infovalue>
+          </wbmb:info>
+          <wbmb:info>
+            <wbmb:infotype>land</wbmb:infotype>
+            <wbmb:infovalue>Schweiz</wbmb:infovalue>
+          </wbmb:info>
+        </wbmb:address>
+      </wbmb:info>
+      <wbmb:info>
+        <wbmb:infotype>versandkosten</wbmb:infotype>
+        <wbmb:infovalue>12.34</wbmb:infovalue>
+      </wbmb:info>
+      <wbmb:info>
+        <wbmb:infotype>schnittstelle</wbmb:infotype>
+        <wbmb:infovalue>62</wbmb:infovalue>
+      </wbmb:info>
+    </wbmb:auftrag_info>
+  </wbmb:auftrag>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

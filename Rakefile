@@ -1,38 +1,24 @@
-# -*- ruby -*-
+lib = File.expand_path('../lib', __FILE__)
+$:.unshift(lib) unless $:.include?(lib)
 
-require 'rubygems'
-require 'hoe'
+require 'rake/testtask'
+require 'rake/clean'
+require 'rspec/core/rake_task'
 
-Hoe.plugin :git
 
-# Hoe.plugin :compiler
-# Hoe.plugin :compiler
-# Hoe.plugin :cucumberfeatures
-# Hoe.plugin :gem_prelude_sucks
-# Hoe.plugin :gem_prelude_sucks
-# Hoe.plugin :git
-# Hoe.plugin :inline
-# Hoe.plugin :inline
-# Hoe.plugin :inline
-# Hoe.plugin :manifest
-# Hoe.plugin :newgem
-# Hoe.plugin :racc
-# Hoe.plugin :racc
-# Hoe.plugin :rubyforge
-# Hoe.plugin :rubyforge
-# Hoe.plugin :rubyforge
-# Hoe.plugin :website
-# Hoe.plugin :yard
+task :default => :test
 
-Hoe.spec 'sandozxmlconv' do
-  # HEY! If you fill these out in ~/.hoe_template/Rakefile.erb then
-  # you'll never have to touch them again!
-  # (delete this comment too, of course)
+task :spec => :clean
+CLEAN.include FileList['pkg/*.gem']
 
-developer('Masaomi Hatakeyama, Zeno R.R. Davatz', 'mhatakeyama@ywesee.com, zdavatz@ywesee.com')
-self.local_rdoc_dir = 'rdoc'
+# rspec
+RSpec::Core::RakeTask.new(:spec)
 
-  # self.rubyforge_name = 'sandozxmlconvx' # if different than 'sandozxmlconv'
+# unit test
+dir = File.dirname(__FILE__)
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = Dir.glob("#{dir}/test/**/*_test.rb")
+  t.warning = false
+  t.verbose = false
 end
-
-# vim: syntax=ruby

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Body>
+  <wbmb:auftrag xmlns:wbmb="http://ywesee.com/wbmb" xmlns:enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema">
+    <wbmb:absender xsi:type="enc:Array" enc:arrayType="wbmb:identifier[3]">
+      <wbmb:identifier>
+        <wbmb:idtype>name</wbmb:idtype>
+        <wbmb:idvalue>ywesee Testspitäler</wbmb:idvalue>
+      </wbmb:identifier>
+      <wbmb:identifier>
+        <wbmb:idtype>kundennummer</wbmb:idtype>
+        <wbmb:idvalue>99</wbmb:idvalue>
+      </wbmb:identifier>
+      <wbmb:identifier>
+        <wbmb:idtype>auftragsnummer</wbmb:idtype>
+        <wbmb:idvalue>10019</wbmb:idvalue>
+      </wbmb:identifier>
+    </wbmb:absender>
+    <wbmb:empfaenger xsi:type="enc:Array" enc:arrayType="wbmb:identifier[2]">
+      <wbmb:identifier>
+        <wbmb:idtype>ean13</wbmb:idtype>
+        <wbmb:idvalue>7601001000681</wbmb:idvalue>
+      </wbmb:identifier>
+      <wbmb:identifier>
+        <wbmb:idtype>auftragsnummer</wbmb:idtype>
+        <wbmb:idvalue>76</wbmb:idvalue>
+      </wbmb:identifier>
+    </wbmb:empfaenger>
+    <wbmb:artikelliste xsi:type="enc:Array" enc:arrayType="wbmb:artikel[1]">
+      <wbmb:artikel>
+        <wbmb:position>1</wbmb:position>
+        <wbmb:identifier>
+          <wbmb:idtype>gag-code</wbmb:idtype>
+          <wbmb:idvalue>300976</wbmb:idvalue>
+        </wbmb:identifier>
+        <wbmb:identifier>
+          <wbmb:idtype>ean13</wbmb:idtype>
+          <wbmb:idvalue>1234567890123</wbmb:idvalue>
+        </wbmb:identifier>
+        <wbmb:identifier>
+          <wbmb:idtype>pharmacode</wbmb:idtype>
+          <wbmb:idvalue>1234567</wbmb:idvalue>
+        </wbmb:identifier>
+        <wbmb:bestellmenge>12</wbmb:bestellmenge>
+      </wbmb:artikel>
+    </wbmb:artikelliste>
+  </wbmb:auftrag>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
