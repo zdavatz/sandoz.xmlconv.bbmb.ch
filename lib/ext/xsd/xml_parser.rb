@@ -1,3 +1,5 @@
+# This patch avoids loading issue by
+# RuntimeError: XML processor module not found.
 module XSD
   module XMLParser
     class << self
