@@ -1,20 +1,17 @@
-#!/usr/bin/env ruby
-# Conversion::SunStoreBdd -- xmlconv2 -- 12.12.2008 -- hwyss@ywesee.com
-
 require 'rexml/document'
 require 'xmlconv/model/bdd'
-
 require 'xmlconv/model/address'
 require 'xmlconv/model/bsr'
 require 'xmlconv/model/delivery'
 require 'xmlconv/model/delivery_item'
 require 'xmlconv/model/name'
 require 'xmlconv/model/party'
+require 'conversion/xmlparser'
 
 
 module XmlConv
   module Conversion
-    class SunStoreBdd
+    class SunStoreBdd < XmlParser
 class << self
   def convert(xml_document)
     bdd = Model::Bdd.new
@@ -26,37 +23,38 @@ class << self
     end
     bdd
   end
-  def parse(xml_src)
-    REXML::Document.new(xml_src)
-  end
   def respond(transaction, responses)
-    doc = REXML::Document.new <<-EOS
+    doc = REXML::Document.new <<-EOS.gsub(/\n/, '')
 <?xml version="1.0" encoding="UTF-8"?>
-<customerOrderResponse xmlns="http://www.e-galexis.com/schemas/"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd"
-  version="1.0" roundUpForCondition="false" backLogDesired="false"
-  language="de" productDescriptionDesired="false">
+<customerOrderResponse
+ xmlns="http://www.e-galexis.com/schemas/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.e-galexis.com/schemas/
+  http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd"
+ version="1.0"
+ roundUpForCondition="false"
+ backLogDesired="false"
+ language="de"
+ productDescriptionDesired="false">
 </customerOrderResponse>
     EOS
     root = doc.root
     transaction.model.deliveries.each_with_index do |delivery, idx|
       if data = responses[idx]
         number = if(order_id = data[:order_id])
-                   _utf8 order_id
+                   order_id
                  else
                    "error-#{transaction.transaction_id}-#{idx}"
                  end
         root.add_element('clientResponse').add_attribute('number', number)
         if data[:products].compact.size == delivery.items.size
           header = root.add_element 'orderHeaderResponse'
-          header.add_attribute 'referenceNumber', _utf8(delivery.customer_id)
+          header.add_attribute 'referenceNumber', delivery.customer_id
           if ship_to = delivery.customer.ship_to
-            attrs = { 'line1' => _utf8(ship_to.name.text) }
+            attrs = { 'line1' => ship_to.name.text }
             attrs2 = {}
             if addr = ship_to.address
               addr.lines.each_with_index do |line, idx|
-                line = _utf8 line
                 case idx
                 when 0
                   attrs2.store 'line2', line
@@ -66,8 +64,8 @@ class << self
                   attrs.store 'line4', line
                 end
               end
-              attrs.store 'line5PostalCode', _utf8(addr.zip_code)
-              attrs.store 'line5City', _utf8(addr.city)
+              attrs.store 'line5PostalCode', addr.zip_code
+              attrs.store 'line5City', addr.city
             end
             address = header.add_element 'deliveryAddress'
             address.add_attributes attrs
@@ -151,7 +149,7 @@ class << self
     customer.role = 'Customer'
     _customer_add_party(customer, '1075', 'BillTo')
     xml_client = REXML::XPath.first(xml_delivery, 'client')
-    id = _utf8(xml_client.attributes['number'])
+    id = xml_client.attributes['number']
     customer.add_id('ACC', id)
     ship_to = _customer_add_party(customer, id, 'ShipTo')
     if(xml_header = REXML::XPath.first(xml_delivery, 'orderHeader'))
@@ -160,56 +158,51 @@ class << self
       # contains the customer's name. We're just guessing it might be in the first
       # line.
       if(xml_name = REXML::XPath.first(xml_header, 'deliveryAddress'))
-        name.text = _utf8(xml_name.attributes['line1'])
+        name.text = xml_name.attributes['line1']
       end
       customer.name = name
       ship_to.name = name
       _party_add_xml_address(ship_to, xml_header)
     end
     if(xml_email = REXML::XPath.first(xml_delivery, '//groupe/online/email'))
-      customer.add_id('email', _utf8(xml_email.text))
+      customer.add_id('email', xml_email.text)
     end
     delivery.add_party(customer)
   end
   def _delivery_add_xml_header(delivery, xml_delivery)
     xml_order = REXML::XPath.first(xml_delivery, 'orderHeader')
-    delivery.add_id('Customer', _utf8(xml_order.attributes['referenceNumber']))
+    delivery.add_id('Customer', xml_order.attributes['referenceNumber'])
     _delivery_add_xml_customer(delivery, xml_delivery)
   end
   def _delivery_add_xml_item(delivery, xml_item)
     item = Model::DeliveryItem.new
-    item.line_no = _utf8(delivery.items.size.next.to_s)
+    item.line_no = delivery.items.size.next.to_s
     if(xml_pcode = REXML::XPath.first(xml_item, 'EAN'))
-      item.add_id('ET-Nummer', _utf8(xml_pcode.attributes['id']))
+      item.add_id('ET-Nummer', xml_pcode.attributes['id'])
     end
     if(xml_pcode = REXML::XPath.first(xml_item, 'pharmaCode'))
-      item.add_id('Pharmacode', _utf8(xml_pcode.attributes['id']))
+      item.add_id('Pharmacode', xml_pcode.attributes['id'])
     end
     xml_qty = xml_item.attributes['orderQuantity'] \
       || xml_item.attributes['defaultOrderQuantity']
-    item.qty = _utf8(xml_qty)
+    item.qty = xml_qty
     item.unit = 'PCE'
     delivery.add_item(item)
   end
   def _party_add_xml_address(party, xml_header)
     if(xml_address = REXML::XPath.first(xml_header, 'deliveryAddress'))
       address = Model::Address.new
-      address.zip_code = _utf8(xml_address.attributes['line5PostalCode'])
-      address.city     = _utf8(xml_address.attributes['line5City'])
+      address.zip_code = xml_address.attributes['line5PostalCode']
+      address.city     = xml_address.attributes['line5City']
       if(xml_lines = REXML::XPath.first(xml_address, 'addressLine2And3Text'))
-        address.add_line(_utf8(xml_lines.attributes['line2']))
-        address.add_line(_utf8(xml_lines.attributes['line3']))
+        address.add_line(xml_lines.attributes['line2'])
+        address.add_line(xml_lines.attributes['line3'])
       end
       if(line = xml_address.attributes['line4'])
-        address.add_line(_utf8(line))
+        address.add_line(line)
       end
       party.address = address
     end
-  end
-  def _utf8(str)
-    str.encode('ISO-8859-1').force_encoding('UTF-8')
-  rescue
-    str
   end
 end
     end
