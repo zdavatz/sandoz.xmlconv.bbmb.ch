@@ -1,20 +1,17 @@
-#!/usr/bin/env ruby
-# Conversion::SunStoreBdd -- xmlconv2 -- 12.12.2008 -- hwyss@ywesee.com
-
 require 'rexml/document'
 require 'xmlconv/model/bdd'
-
 require 'xmlconv/model/address'
 require 'xmlconv/model/bsr'
 require 'xmlconv/model/delivery'
 require 'xmlconv/model/delivery_item'
 require 'xmlconv/model/name'
 require 'xmlconv/model/party'
+require 'conversion/xmlparser'
 
 
 module XmlConv
   module Conversion
-    class SunStoreBdd
+    class SunStoreBdd < XmlParser
 class << self
   def convert(xml_document)
     bdd = Model::Bdd.new
@@ -26,17 +23,19 @@ class << self
     end
     bdd
   end
-  def parse(xml_src)
-    REXML::Document.new(xml_src)
-  end
   def respond(transaction, responses)
-    doc = REXML::Document.new <<-EOS
+    doc = REXML::Document.new <<-EOS.gsub(/\n/, '')
 <?xml version="1.0" encoding="UTF-8"?>
-<customerOrderResponse xmlns="http://www.e-galexis.com/schemas/"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd"
-  version="1.0" roundUpForCondition="false" backLogDesired="false"
-  language="de" productDescriptionDesired="false">
+<customerOrderResponse
+ xmlns="http://www.e-galexis.com/schemas/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.e-galexis.com/schemas/
+  http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd"
+ version="1.0"
+ roundUpForCondition="false"
+ backLogDesired="false"
+ language="de"
+ productDescriptionDesired="false">
 </customerOrderResponse>
     EOS
     root = doc.root

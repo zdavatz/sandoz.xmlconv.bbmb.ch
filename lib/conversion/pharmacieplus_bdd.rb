@@ -10,10 +10,11 @@ require 'xmlconv/model/delivery'
 require 'xmlconv/model/delivery_item'
 require 'xmlconv/model/name'
 require 'xmlconv/model/party'
+require 'conversion/xmlparser'
 
 module XmlConv
   module Conversion
-    class PharmaciePlusBdd
+    class PharmaciePlusBdd < XmlParser
 class << self
   def convert(xml_document)
     bdd = Model::Bdd.new
@@ -24,9 +25,6 @@ class << self
       _bdd_add_xml_delivery(bdd, xml_delivery)
     }
     bdd
-  end
-  def parse(xml_src)
-    REXML::Document.new(xml_src)
   end
   def _bdd_add_xml_delivery(bdd, xml_delivery)
     delivery = Model::Delivery.new
