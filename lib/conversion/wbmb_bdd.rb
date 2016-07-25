@@ -2,6 +2,7 @@
 # Conversion::WbmbBdd -- xmlconv2 -- 23.08.2006 -- hwyss@ywesee.com
 
 require 'ext/xsd/charset'
+require 'ext/xsd/xml_parser'
 
 require 'soap/marshal'
 require 'xmlconv/model/address'
