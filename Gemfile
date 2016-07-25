@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'xmlconv'
+gem 'xmlconv', '~> 1.0.9'
 gem 'sbsm'
 gem 'odba'
 gem 'soap4r'

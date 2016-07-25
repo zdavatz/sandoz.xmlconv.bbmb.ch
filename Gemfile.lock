@@ -77,7 +77,7 @@ GEM
     watir-webdriver (0.9.1)
       selenium-webdriver (>= 2.46.2)
     websocket (1.2.3)
-    xmlconv (1.0.8)
+    xmlconv (1.0.9)
       deprecated (= 2.0.1)
       htmlgrid
       json
@@ -138,7 +138,7 @@ DEPENDENCIES
   soap4r
   watir
   watir-webdriver
-  xmlconv
+  xmlconv (~> 1.0.9)
   yus
 
 BUNDLED WITH
