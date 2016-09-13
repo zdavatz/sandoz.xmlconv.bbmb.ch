@@ -1,9 +1,10 @@
 # sandoz.xmlconv.bbmb.ch
 
+## Description
+
 The xml converter files for Sandoz Switzerland.
 
-A graphical overview:
-
+graphical overview:
 ![sandozxmlconv](https://raw.githubusercontent.com/zdavatz/sandoz.xmlconv.bbmb.ch/master/sandozxmlconv.jpeg)
 
 ## Repository
@@ -17,6 +18,8 @@ https://github.com/zdavatz/sandoz.xmlconv.bbmb.ch
 * odba
 * soap4r
 * yus (runtime)
+
+See `Gemfile`
 
 ## Install
 
@@ -60,4 +63,4 @@ $ bundle exec rake test
 
 ## License
 
-* GPLv2
+GPLv2
