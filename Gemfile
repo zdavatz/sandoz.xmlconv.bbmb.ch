@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'xmlconv', '~> 1.0.9'
-gem 'sbsm'
+gem 'ydbi', '~> 0.5.3'
+gem 'sbsm', '~> 1.3.0'
 gem 'odba'
 gem 'soap4r'
 
@@ -29,18 +30,4 @@ end
 
 group :development do
   gem 'yus'
-end
-
-# NOTE: additional personal Gemfile.hack support for developer
-#
-# @example
-#   bundle install         #=> loads Gemfile.hack, if it exists
-#   HACK=no bundle install #=> ignores Gemfile.hack, even if it exists
-group :development, :test do
-  if ENV['HACK'] !~ /\A(no|false)\z/i
-    hack = File.expand_path('../Gemfile.hack', __FILE__)
-    if File.exist?(hack)
-      eval File.read(hack)
-    end
-  end
 end
