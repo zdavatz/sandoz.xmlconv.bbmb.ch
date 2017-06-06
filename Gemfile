@@ -1,18 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'xmlconv', '~> 1.0.9'
+gem 'xmlconv', :path => '/home/niklaus/git/xmlconv'
+gem 'sbsm', '>= 1.4.2', :path => '/home/niklaus/git/sbsm'
 gem 'ydbi', '~> 0.5.3'
-gem 'sbsm', '~> 1.3.0'
 gem 'odba'
 gem 'soap4r'
 
 group :debugger do
-  if RUBY_VERSION.match(/^1/)
-    gem 'pry-debugger'
-  else
-    gem 'pry-byebug'
-    gem 'pry-doc'
-  end
+  gem 'pry-byebug'
+  gem 'pry-doc'
 end
 
 group :test, :development do

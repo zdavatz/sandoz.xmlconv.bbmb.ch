@@ -47,7 +47,7 @@ module XmlConv
       item = delivery.items.first
       assert_instance_of(Model::DeliveryItem, item)
       assert_equal('1', item.line_no)
-      assert_equal(nil, item.et_nummer_id)
+      assert_nil(item.et_nummer_id)
       assert_equal('1336630', item.pharmacode_id)
       assert_equal('10', item.qty)
 
@@ -55,7 +55,7 @@ module XmlConv
       assert_instance_of(Model::DeliveryItem, item)
       assert_equal('2', item.line_no)
       assert_equal('7680123456789', item.et_nummer_id)
-      assert_equal(nil, item.pharmacode_id)
+      assert_nil(item.pharmacode_id)
       assert_equal('5', item.qty)
     end
 

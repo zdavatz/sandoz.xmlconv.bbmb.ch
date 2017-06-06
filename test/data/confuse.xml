@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<customerOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0"
+language="fr" productDescriptionDesired="true"
+communicationSoftwareId="ywesee Test"
+xmlns="http://www.e-galexis.com/schemas/">
+  <client number="99" password="" />
+  <orderHeader deliveryDate="2016-07-15" referenceNumber="99"/>
+  <orderLines>
+    <productOrderLine orderQuantity="2">
+      <pharmaCode id="2508375" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="2">
+      <pharmaCode id="5195126" />
+    </productOrderLine>
+  </orderLines>
+</customerOrder>
