@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'xmlconv', :path => '/home/niklaus/git/xmlconv'
-gem 'sbsm', '>= 1.4.2', :path => '/home/niklaus/git/sbsm'
+gem 'xmlconv', '>= 1.1.1'
+gem 'sbsm', '>= 1.4.3'
 gem 'ydbi', '~> 0.5.3'
 gem 'odba'
 gem 'soap4r'

@@ -1,32 +1,3 @@
-PATH
-  remote: /home/niklaus/git/sbsm
-  specs:
-    sbsm (1.4.2)
-      chrono_logger
-      hpricot
-      mail
-      mimemagic
-      rack
-
-PATH
-  remote: /home/niklaus/git/xmlconv
-  specs:
-    xmlconv (1.1.0)
-      deprecated (= 2.0.1)
-      htmlgrid
-      json
-      mail
-      needle
-      odba (>= 1.1.2)
-      rclconf
-      sbsm
-      syck
-      ydbd-pg (>= 0.5.1)
-      ydbi (>= 0.5.1)
-      ydim
-      ypdf-writer
-      yus
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -87,6 +58,12 @@ GEM
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
     rubyzip (1.2.1)
+    sbsm (1.4.3)
+      chrono_logger
+      hpricot
+      mail
+      mimemagic
+      rack
     selenium-webdriver (3.4.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
@@ -101,6 +78,21 @@ GEM
     watir-webdriver (0.9.9)
       selenium-webdriver (>= 2.46.2)
     websocket (1.2.4)
+    xmlconv (1.1.1)
+      deprecated (= 2.0.1)
+      htmlgrid
+      json
+      mail
+      needle
+      odba (>= 1.1.2)
+      rclconf
+      sbsm (>= 1.4.3)
+      syck
+      ydbd-pg (>= 0.5.1)
+      ydbi (>= 0.5.1)
+      ydim
+      ypdf-writer
+      yus
     yard (0.9.9)
     ydbd-pg (0.5.3)
       pg
@@ -143,13 +135,13 @@ DEPENDENCIES
   pry-doc
   rake
   rspec
-  sbsm (>= 1.4.2)!
+  sbsm (>= 1.4.3)
   soap4r
   watir
   watir-webdriver
-  xmlconv!
+  xmlconv (>= 1.1.1)
   ydbi (~> 0.5.3)
   yus
 
 BUNDLED WITH
-   1.15.0
+   1.15.1
