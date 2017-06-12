@@ -13,7 +13,7 @@ module XmlConv
         if(bdd = transaction.model)
           bbmb = DRbObject.new(nil, drb_url)
           messages = []
-          bdd.deliveries.each_with_index { |delivery, idx|
+          bdd.deliveries.each_with_index do |delivery, idx|
             inject_id, order, info = nil
             begin
               customer = delivery.customer
@@ -54,7 +54,7 @@ module XmlConv
               end
               messages.push message
             end
-          }
+          end
           unless messages.empty?
             raise messages.join("\n\n")
           end

@@ -40,6 +40,9 @@ $ mkdir -p log var/output
 # xmlconvd
 $ bundle exec rackup
 
+# bin/admin
+
+Use something like `sudo -u bbmb /usr/local/bin/ruby-240 /usr/local/bin/xmlconv_admin config=/var/www/sandoz.xmlconv.bbmb.ch/etc/xmlconv.yml`
 # yusd
 $ bundle exec yusd config=/path/to/etc/yus.yml
 ```
@@ -74,23 +77,24 @@ The command should have a result status of 0 and respond with something like
   > Content-Type: application/x-www-form-urlencoded
   >
   } [625 bytes data]
-  * upload completely sent off: 625 out of 625 bytes
-  < HTTP/1.1 500 Internal Server Error
-  < Date: Wed, 31 May 2017 13:12:03 GMT
-  < Server: Apache
+  * upload completely sent off: 629 out of 629 bytes
+  < HTTP/1.1 200 OK
+  < Date: Mon, 12 Jun 2017 12:15:03 GMT
+  * Server WEBrick/1.3.1 (Ruby/2.4.0/2016-12-24) is not blacklisted
+  < Server: WEBrick/1.3.1 (Ruby/2.4.0/2016-12-24)
   < Content-Length: 0
-  < Connection: close
-  < Content-Type: text/xml;charset=utf-8
+  < Content-Type: text/html;charset=UTF-8
+  < Set-Cookie: _session_id=3c2b018a11c1438855db71923b; path=/
   <
-  * Curl_http_done: called premature == 0
-  100   625    0     0  100   625      0   9583 --:--:-- --:--:-- --:--:-- 14880
-  * Closing connection 0
-`
-
-On the server you should see in the apache log something (where 80.218.53.88 is your IP-address) like this. The error code is 500 because it is not handled by a propharma.rb file.
+  * Connection #0 to host sandoz.xmlconv.bbmb.ngiger.ch left intact
 
   80.218.53.88 - - [31/May/2017:15:12:03 +0200] "POST /propharma HTTP/1.1" 500 - "-" "curl/7.50.3"
 
+Verify in the admin web interface:
+  * that a new transaction is generated
+  * that the fiel 'Absender' contains the correct remote IP address (numerically)
+  * it status is 'Bestellung via BBMB erfolgreich'
+  * its detail contains the correct orderlines
 
 It is normal to see polling errors, as long as you dont specify a valid pop
 

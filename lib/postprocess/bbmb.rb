@@ -7,9 +7,9 @@ module XmlConv
   module PostProcess
     module Bbmb
       def Bbmb.inject(drb_url, name_short, inject_id, transaction=nil)
-        ## inject with 4 arguments is a special case where the recipient is 
+        ## inject with 4 arguments is a special case where the recipient is
         #  not known in BBMB. In all other cases we can take the inject_id
-        #  directly from customer.acc_id. If so, inject is called with 
+        #  directly from customer.acc_id. If so, inject is called with
         #  3 arguments, with transaction as the third argument.
         if(transaction.nil?)
           transaction = inject_id

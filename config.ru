@@ -9,16 +9,13 @@ lib_dir = File.expand_path(File.join(File.dirname(__FILE__), 'lib').untaint)
 $LOAD_PATH << lib_dir
 $stdout.sync = true
 
+config_file =  File.join(Dir.pwd, 'etc', 'xmlconv.yml')
+ENV['config'] = config_file
+raise "Configfile #{config_file} must exit" unless File.exist?(config_file)
+puts "load from #{config_file}"
 require 'xmlconv/config'
-
-[ File.join(Dir.pwd, 'etc', 'xmlconv.yml'),
-].each do |config_file|
-  if File.exist?(config_file)
-    puts "load from #{config_file}"
-    XmlConv::CONFIG.load(config_file)
-    break
-  end
-end
+XmlConv::CONFIG.load(config_file)
+XmlConv::CONFIG.destination ||= File.join(Dir.pwd, 'var', 'output')
 ENV['SERVER_PORT'] =  XmlConv::CONFIG.server_port.to_s if XmlConv::CONFIG.respond_to?(:server_port)
 
 require 'rack'
@@ -28,15 +25,12 @@ require 'rack'
 require 'sbsm/logger'
 require 'webrick'
 
+require 'xmlconv/version'
 require 'xmlconv/util/destination'
 require 'xmlconv/util/transaction'
 require 'xmlconv/util/application'
 require 'xmlconv/util/rack_interface'
 
-ENV['DRB_SERVER'] = 'druby://localhost:12004'
-ENV['ACCESS_DESTINATION'] = '/var/www/sandoz.xmlconv.bbmb.ch/var/output/'
-ENV['ACCESS_BBMB'] = 'druby://localhost:12004'
-ENV['WRITER'] = 'BddCsv'
 
 SBSM.logger= ChronoLogger.new(XmlConv::CONFIG.log_pattern)
 use Rack::CommonLogger, SBSM.logger
