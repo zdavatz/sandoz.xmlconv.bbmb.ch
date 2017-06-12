@@ -4,6 +4,7 @@
 require 'csv'
 require 'xmlconv/config'
 require 'xmlconv/model/document'
+require 'xmlconv/util/application' # needed for bin/bbmb_admin
 
 module XmlConv
   module Conversion
