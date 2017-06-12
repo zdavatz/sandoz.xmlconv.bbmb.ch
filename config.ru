@@ -10,13 +10,19 @@ $LOAD_PATH << lib_dir
 $stdout.sync = true
 
 config_file =  File.join(Dir.pwd, 'etc', 'xmlconv.yml')
+
 ENV['config'] = config_file
 raise "Configfile #{config_file} must exit" unless File.exist?(config_file)
-puts "load from #{config_file}"
+puts "Use config_file #{config_file}"
 require 'xmlconv/config'
 XmlConv::CONFIG.load(config_file)
 XmlConv::CONFIG.destination ||= File.join(Dir.pwd, 'var', 'output')
 ENV['SERVER_PORT'] =  XmlConv::CONFIG.server_port.to_s if XmlConv::CONFIG.respond_to?(:server_port)
+ARGV.push "config=#{config_file}"
+require 'bbmb/model/customer'
+require 'bbmb/model/product'
+require 'bbmb/model/order'
+require 'bbmb/config'
 
 require 'rack'
 require 'rack/static'
