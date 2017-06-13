@@ -86,6 +86,29 @@ The command should have a result status of 0 and respond with something like
   < Content-Type: text/html;charset=UTF-8
   < Set-Cookie: _session_id=3c2b018a11c1438855db71923b; path=/
   <
+  <?xml version='1.0' encoding='UTF-8'?>
+  <customerOrderResponse xmlns='http://www.e-galexis.com/schemas/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.e-galexis.com/schemas/ http://www.e-galexis.com/schemas/POS/customerOrder/customerOrderResponse.xsd' version='1.0' roundUpForCondition='false' backLogDesired='false' language='de' productDescriptionDesired='false'>
+    <clientResponse number='99-130'/>
+    <orderHeaderResponse referenceNumber='99'>
+      <deliveryAddress/>
+    </orderHeaderResponse>
+    <orderLinesResponse>
+      <productOrderLineResponse lineAccepted='true' backLogLine='false' roundUpForConditionDone='false' productReplaced='false'>
+        <productOrderLine orderQuantity='2'>
+          <pharmaCode id='2508375'/>
+        </productOrderLine>
+        <productResponse wholesalerProductCode='44060678' description='Cip eco 250 mg Filmtabl 10'/>
+        <availability status='yes'/>
+      </productOrderLineResponse>
+      <productOrderLineResponse lineAccepted='true' backLogLine='false' roundUpForConditionDone='false' productReplaced='false'>
+        <productOrderLine orderQuantity='2'>
+          <pharmaCode id='5195126'/>
+        </productOrderLine>
+        <productResponse wholesalerProductCode='05201388' description='Candesartan Sandoz 8 mg Tbl 98'/>
+        <availability status='yes'/>
+      </productOrderLineResponse>
+    </orderLinesResponse>
+  </customerOrderResponse
   * Connection #0 to host sandoz.xmlconv.bbmb.ngiger.ch left intact
 
   80.218.53.88 - - [31/May/2017:15:12:03 +0200] "POST /propharma HTTP/1.1" 500 - "-" "curl/7.50.3"
@@ -95,6 +118,9 @@ Verify in the admin web interface:
   * that the fiel 'Absender' contains the correct remote IP address (numerically)
   * it status is 'Bestellung via BBMB erfolgreich'
   * its detail contains the correct orderlines
+
+Verify in your sandoz.bbmb.ch that
+  * the user 99 lists also the new order
 
 It is normal to see polling errors, as long as you dont specify a valid pop
 

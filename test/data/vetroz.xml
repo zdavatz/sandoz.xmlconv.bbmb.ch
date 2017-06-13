@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<customerOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     compressionDesired="false" productDescriptionDesired="true"
+     backLogDesired="true" language="fr"
+     roundUpForCondition="true" version="1.0">
+  <client number="4100610637" password="MDPOK" />
+  <orderHeader deliveryDate="2017-06-06"
+       referenceNumber="060620171" mannerOfTransport="tour"
+       phoneCallDesired="false" urgent="false">
+    <deliveryAddress line1="Rt Cantonale 90 CP. 16"
+         line4="Pharmacie VÃ©troz" line5PostalCode="1963"
+         line5City="VÃ©troz">
+      <addressLine2And3Text line2="VÃ©troz" line3="VÃ©troz" />
+    </deliveryAddress>
+  </orderHeader>
+  <orderLines>
+    <productOrderLine orderQuantity="6"
+         roundUpForCondition="true" backLogDesired="true">
+      <pharmaCode id="6708929" />
+    </productOrderLine>
+    <productOrderLine orderQuantity="21"
+         roundUpForCondition="true" backLogDesired="true">
+      <pharmaCode id="6708906" />
+    </productOrderLine>
+  </orderLines>
+</customerOrder>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<customerOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" compressionDesired="false" productDescriptionDesired="true" backLogDesired="true" language="fr" roundUpForCondition="true" version="1.0">
+    <client number="99" password="" />
+    <orderHeader deliveryDate="2005-10-25" referenceNumber="13.06.20172" mannerOfTransport="tour" phoneCallDesired="false" urgent="false">
+    <deliveryAddress line1="Rue du Scex 4" line4="Sion" line5PostalCode="1950" line5City="Sion">
+        <addressLine2And3Text line2="Sion" line3="PharmaSoft" /></deliveryAddress></orderHeader>
+    <orderLines>
+    <productOrderLine orderQuantity="2" roundUpForCondition="true" backLogDesired="true">
+        <pharmaCode id="2820351" /></productOrderLine>
+    <productOrderLine orderQuantity="1" roundUpForCondition="true" backLogDesired="true">
+        <pharmaCode id="1583564" /></productOrderLine>
+    <productOrderLine orderQuantity="10" roundUpForCondition="true" backLogDesired="true">
+        <pharmaCode id="2358912" /></productOrderLine>
+    </orderLines>
+</customerOrder>
+
