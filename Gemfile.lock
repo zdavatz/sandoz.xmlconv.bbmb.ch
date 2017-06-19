@@ -74,7 +74,7 @@ GEM
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
     rubyzip (1.2.1)
-    sbsm (1.4.4)
+    sbsm (1.4.5)
       chrono_logger
       hpricot
       mail
@@ -152,7 +152,7 @@ DEPENDENCIES
   pry-doc
   rake
   rspec
-  sbsm (>= 1.4.4)
+  sbsm (>= 1.4.5)
   soap4r
   watir
   watir-webdriver
