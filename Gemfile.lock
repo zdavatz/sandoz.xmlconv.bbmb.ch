@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bbmb (2.3.1)
+    bbmb (2.3.2)
       deprecated (= 2.0.1)
       hpricot
       htmlgrid
@@ -10,7 +10,7 @@ GEM
       needle
       odba (>= 1.1.2)
       rclconf
-      sbsm (>= 1.4.2)
+      sbsm (>= 1.4.5)
       syck
       ydbd-pg (>= 0.5.2)
       ydbi (>= 0.5.3)
@@ -94,7 +94,7 @@ GEM
     watir-webdriver (0.9.9)
       selenium-webdriver (>= 2.46.2)
     websocket (1.2.4)
-    xmlconv (1.1.5)
+    xmlconv (1.1.6)
       deprecated (= 2.0.1)
       htmlgrid
       json
@@ -102,7 +102,7 @@ GEM
       needle
       odba (>= 1.1.2)
       rclconf
-      sbsm (>= 1.4.4)
+      sbsm (>= 1.4.5)
       syck
       ydbd-pg (>= 0.5.1)
       ydbi (>= 0.5.1)
@@ -144,7 +144,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bbmb (>= 2.3.1)
+  bbmb (>= 2.3.2)
   flexmock (~> 2.2)
   minitest (~> 5.9)
   odba
@@ -156,7 +156,7 @@ DEPENDENCIES
   soap4r
   watir
   watir-webdriver
-  xmlconv (>= 1.1.5)
+  xmlconv (>= 1.1.6)
   ydbi (~> 0.5.3)
   yus
 
