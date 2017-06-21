@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'bbmb',  '>= 2.3.2'
-gem 'xmlconv', '>= 1.1.6'
+gem 'xmlconv', '>= 1.1.7'
 gem 'sbsm', '>= 1.4.5'
 gem 'ydbi', '~> 0.5.3'
 gem 'odba'
