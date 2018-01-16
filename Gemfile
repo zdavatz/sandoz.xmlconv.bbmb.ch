@@ -9,7 +9,6 @@ gem 'soap4r'
 
 group :debugger do
   gem 'pry-byebug'
-  gem 'pry-doc'
 end
 
 group :test, :development do
