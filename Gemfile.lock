@@ -53,9 +53,6 @@ GEM
     pry-byebug (3.4.2)
       byebug (~> 9.0)
       pry (~> 0.10)
-    pry-doc (0.10.0)
-      pry (~> 0.9)
-      yard (~> 0.9)
     rack (2.0.3)
     rake (12.0.0)
     rclconf (1.0.0)
@@ -109,7 +106,6 @@ GEM
       ydim
       ypdf-writer
       yus
-    yard (0.9.9)
     ydbd-pg (0.5.3)
       pg
       ydbi (>= 0.5.0)
@@ -149,7 +145,6 @@ DEPENDENCIES
   minitest (~> 5.9)
   odba
   pry-byebug
-  pry-doc
   rake
   rspec
   sbsm (>= 1.4.5)
@@ -161,4 +156,4 @@ DEPENDENCIES
   yus
 
 BUNDLED WITH
-   1.15.3
+   1.16.0
